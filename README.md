@@ -126,7 +126,6 @@
     const imageListDiv = document.getElementById("image-list");
     const nicknameInput = document.getElementById("nickname");
     const titleInput = document.getElementById("title");
-
     const modal = document.getElementById("uploadModal");
     const plusBtn = document.getElementById("plusButton");
 
@@ -151,20 +150,20 @@
       }
 
       const fileName = `${Date.now()}_${file.name}`;
-
       statusDiv.textContent = "アップロード中…";
 
-      // 画像ファイルをストレージにアップロード
+      // ✅ contentType を指定してアップロード
       const { error: uploadError } = await supabase.storage
         .from(bucketName)
-        .upload(fileName, file);
+        .upload(fileName, file, {
+          contentType: file.type,
+        });
 
       if (uploadError) {
         statusDiv.textContent = `アップロード失敗: ${uploadError.message}`;
         return;
       }
 
-      // postsテーブルに投稿情報を保存
       const { error: insertError } = await supabase
         .from("posts")
         .insert([
@@ -205,15 +204,19 @@
       imageListDiv.innerHTML = "";
 
       for (const post of data) {
-        const { publicURL } = supabase.storage
+        const { data: urlData, error: urlError } = await supabase.storage
           .from(bucketName)
           .getPublicUrl(post.image_name);
+
+        if (urlError || !urlData?.publicUrl) {
+          continue;
+        }
 
         const wrapper = document.createElement("div");
         wrapper.className = "image-item";
 
         const img = document.createElement("img");
-        img.src = publicURL;
+        img.src = urlData.publicUrl;
         img.alt = post.title;
 
         const info = document.createElement("div");
