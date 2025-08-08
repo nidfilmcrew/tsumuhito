@@ -173,6 +173,7 @@
         ]);
 
       if (insertError) {
+	console.error("INSERTエラー", insertError);
         statusDiv.textContent = `投稿情報の保存失敗: ${insertError.message}`;
         return;
       }
@@ -201,20 +202,19 @@
       }
 
       for (const post of data) {
-        const { publicURL } = supabase.storage
-          .from(bucketName)
-          .getPublicUrl(post.image_name);
-
-        const isAccessible = await checkImageExists(publicURL);
+        const isAccessible = await checkImageExists(post.image_name);
 
         if (!isAccessible) {
-          // Storageに画像がない場合 → DBから該当レコードを削除
           await supabase
             .from("posts")
             .delete()
             .eq("image_name", post.image_name);
           continue;
         }
+
+        const { publicURL } = supabase.storage
+          .from(bucketName)
+          .getPublicUrl(post.image_name);
 
         const wrapper = document.createElement("div");
         wrapper.className = "image-item";
@@ -235,13 +235,9 @@
       statusDiv.textContent = "";
     }
 
-    async function checkImageExists(url) {
-      try {
-        const res = await fetch(url, { method: "HEAD" });
-        return res.ok;
-      } catch (err) {
-        return false;
-      }
+    async function checkImageExists(imageName) {
+      const { data, error } = await supabase.storage.from(bucketName).download(imageName);
+      return !error;
     }
 
     window.addEventListener("load", () => {
