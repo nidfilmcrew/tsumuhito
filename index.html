@@ -188,6 +188,7 @@
     });
 
     async function loadImages() {
+	console.log("loadImages開始");
       statusDiv.textContent = "画像一覧を読み込み中…";
       imageListDiv.innerHTML = "";
 
@@ -196,13 +197,19 @@
         .select("*")
         .order("id", { ascending: false });
 
+	console.log("取得したデータ:", data);
+
       if (error) {
         statusDiv.textContent = `投稿一覧の取得失敗: ${error.message}`;
         return;
       }
 
       for (const post of data) {
+	console.log("チェック対象:", post.image_name);
+
         const isAccessible = await checkImageExists(post.image_name);
+
+	console.log("チェック結果:", isAccessible);
 
         if (!isAccessible) {
           await supabase
