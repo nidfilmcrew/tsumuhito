@@ -219,17 +219,17 @@
           continue;
         }
 
-        const { publicURL } = supabase.storage
+        const { data: urlData } = supabase.storage
           .from(bucketName)
           .getPublicUrl(post.image_name);
 
-	console.log("画像URL:", publicURL);
+	console.log("画像URL:", urlData.publicUrl);
 
         const wrapper = document.createElement("div");
         wrapper.className = "image-item";
 
         const img = document.createElement("img");
-        img.src = publicURL;
+        img.src = urlData.publicUrl;
         img.alt = post.title;
 
         const info = document.createElement("div");
