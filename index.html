@@ -216,6 +216,8 @@
           .from(bucketName)
           .getPublicUrl(post.image_name);
 
+	console.log("画像URL:", publicURL);
+
         const wrapper = document.createElement("div");
         wrapper.className = "image-item";
 
