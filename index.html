@@ -174,57 +174,13 @@ async function convertToJpeg(file) {
 }
 
 uploadBtn.addEventListener("click", async () => {
-  let file = fileInput.files[0];
-  const nickname = nicknameInput.value.trim();
-  const title = titleInput.value.trim();
+  const file = fileInput.files[0];
+      const nickname = nicknameInput.value.trim();
+      const title = titleInput.value.trim();
 
-  if (!file || !nickname || !title) {
-    statusDiv.textContent = "すべての項目を入力してください。";
-    return;
-  }
-
-  // JPEG以外（DNG含む）は変換
-  if (!file.type.includes("jpeg") && !file.type.includes("jpg")) {
-    statusDiv.textContent = "画像を変換中…";
-    file = await convertToJpeg(file);
-  }
-
-  const fileName = `${Date.now()}_${file.name}`;
-  statusDiv.textContent = "アップロード中…";
-
-  const { error: uploadError } = await supabase.storage
-    .from(bucketName)
-    .upload(fileName, file);
-
-  if (uploadError) {
-    statusDiv.textContent = `アップロード失敗: ${uploadError.message}`;
-    return;
-  }
-
-  const { error: insertError } = await supabase
-    .from("posts")
-    .insert([
-      {
-        title: title,
-        nickname: nickname,
-        image_name: fileName,
-      },
-    ]);
-
-  if (insertError) {
-    console.error("INSERTエラー", insertError);
-    statusDiv.textContent = `投稿情報の保存失敗: ${insertError.message}`;
-    return;
-  }
-
-  modal.style.display = "none";
-  fileInput.value = "";
-  nicknameInput.value = "";
-  titleInput.value = "";
-  statusDiv.textContent = "アップロード＆保存完了！";
-
-  loadImages();
-});
+      if (!file || !nickname || !title) {
+        statusDiv.textContent = "すべての項目を入力してください。";
+        return;
       }
 
       const fileName = `${Date.now()}_${file.name}`;
