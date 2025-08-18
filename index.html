@@ -330,17 +330,15 @@
       return !error;
     }
 
-    // 読み込み画面表示5秒
     window.addEventListener("load", () => {
       const loadingScreen = document.getElementById("loading-screen");
-      setTimeout(async () => {
+
+await loadImages();　//画像を全て読み込むまで待つ
+
         loadingScreen.classList.add("hidden");
         loadingScreen.addEventListener("transitionend", () => {
           loadingScreen.style.display = "none";
         });
-
-        await loadImages();
-      }, 5000);
     });
   </script>
 </body>
