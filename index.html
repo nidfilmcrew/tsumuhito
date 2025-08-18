@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>摘む人</title>
-<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 
   <style>
     body {
@@ -17,18 +17,18 @@
     h1 {
       text-align: center;
       margin-top: 1em;
-  font-family: 'Zen Old Mincho', serif;
+      font-family: 'Zen Old Mincho', serif;
     }
 
     #image-list {
       column-count: 2;
-  column-gap: 1em;
-  padding: 1em;
+      column-gap: 1em;
+      padding: 1em;
     }
 
     .image-item {
       break-inside: avoid;
-  margin-bottom: 1em;
+      margin-bottom: 1em;
     }
 
     .image-item img {
@@ -87,9 +87,48 @@
       text-align: center;
       margin-top: 1em;
     }
+
+    /* ローディング画面 */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #loading-screen h1 {
+      font-family: 'Zen Old Mincho', serif;
+      font-size: 2em;
+      animation: fadeBlink 1.5s infinite;
+    }
+
+    @keyframes fadeBlink {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    .hidden {
+      opacity: 0;
+      transition: opacity 0.5s ease-out;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
+
+  <!-- ローディング画面 -->
+  <div id="loading-screen">
+    <div id="loading-content">
+      <h1>読み込み中です…</h1>
+    </div>
+  </div>
 
   <h1>摘む人</h1>
 
@@ -108,7 +147,6 @@
   </div>
 
   <button id="plusButton">＋</button>
-
   <div id="status"></div>
 
   <script type="module">
@@ -116,7 +154,7 @@
 
     const supabase = createClient(
       "https://hrtuyjkbchlkxzkzltak.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhydHV5amtiY2hsa3h6a3psdGFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0NTc3NTQsImV4cCI6MjA3MDAzMzc1NH0.mShgkdKTBUBQA9M4YeVQUjEnLlpOXwBhShRJ-bGC-BM"
+      "YOUR_SUPABASE_ANON_KEY"
     );
 
     const bucketName = "images";
@@ -136,139 +174,96 @@
     });
 
     function closeModalOnOutsideTap(e) {
-      if (e.target === modal) {
-        modal.style.display = "none";
-      }
+      if (e.target === modal) modal.style.display = "none";
     }
 
-//PC用クリック
-window.addEventListener("click", closeModalOnOutsideTap);
+    window.addEventListener("click", closeModalOnOutsideTap);
+    window.addEventListener("touchstart", closeModalOnOutsideTap);
 
-//スマホ用タップ
-window.addEventListener("touchstart", closeModalOnOutsideTap);
+    // JPEG変換
+    async function convertToJpeg(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = new Image();
+          img.onload = function () {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob((blob) => {
+              resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", { type: "image/jpeg" }));
+            }, "image/jpeg", 0.8);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
 
-// 画像をJPEGに変換する関数
-async function convertToJpeg(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const img = new Image();
-      img.onload = function () {
-        const canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        canvas.toBlob(
-          (blob) => {
-            resolve(
-              new File(
-                [blob],
-                file.name.replace(/\.[^/.]+$/, "") + ".jpg",
-                { type: "image/jpeg" }
-              )
-            );
-          },
-          "image/jpeg",
-          0.8 // 圧縮率
-        );
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
+    // アップロード処理
     uploadBtn.addEventListener("click", async () => {
       let file = fileInput.files[0];
-const nickname = nicknameInput.value.trim();
-const title = titleInput.value.trim();
+      const nickname = nicknameInput.value.trim();
+      const title = titleInput.value.trim();
 
-if (!file || !nickname || !title) {
-  statusDiv.textContent = "すべての項目を入力してください。";
-  return;
-}
-
-if (!file.type.includes("jpeg") && !file.type.includes("jpg")) {
-  statusDiv.textContent = "画像を変換中…";
-  file = await convertToJpeg(file);
-}
-
-const fileName = `${Date.now()}_${file.name}`;
-statusDiv.textContent = "アップロード中…";
-
-const { error: uploadError } = await supabase.storage
-  .from(bucketName)
-  .upload(fileName, file);
-
-if (uploadError) {
-  statusDiv.textContent = `アップロード失敗: ${uploadError.message}`;
-  return;
-}
-
-const { error: insertError } = await supabase
-  .from("posts")
-  .insert([
-    {
-      title: title,
-      nickname: nickname,
-      image_name: fileName,
-    },
-  ]);
-
-if (insertError) {
-  console.error("INSERTエラー", insertError);
-  statusDiv.textContent = `投稿情報の保存失敗: ${insertError.message}`;
-  return;
-}
-
-modal.style.display = "none";
-fileInput.value = "";
-nicknameInput.value = "";
-titleInput.value = "";
-statusDiv.textContent = "アップロード＆保存完了！";
-
-loadImages();
-    });
-
-    async function loadImages() {
-	console.log("loadImages開始");
-      statusDiv.textContent = "画像一覧を読み込み中…";
-      imageListDiv.innerHTML = "";
-
-      const { data, error } = await supabase
-        .from("posts")
-        .select("*")
-        .order("id", { ascending: false });
-
-	console.log("取得したデータ:", data);
-
-      if (error) {
-        statusDiv.textContent = `投稿一覧の取得失敗: ${error.message}`;
+      if (!file || !nickname || !title) {
+        statusDiv.textContent = "すべての項目を入力してください。";
         return;
       }
 
+      if (!file.type.includes("jpeg") && !file.type.includes("jpg")) {
+        statusDiv.textContent = "画像を変換中…";
+        file = await convertToJpeg(file);
+      }
+
+      const fileName = `${Date.now()}_${file.name}`;
+      statusDiv.textContent = "アップロード中…";
+
+      const { error: uploadError } = await supabase.storage.from(bucketName).upload(fileName, file);
+      if (uploadError) {
+        statusDiv.textContent = `アップロード失敗: ${uploadError.message}`;
+        return;
+      }
+
+      const { error: insertError } = await supabase.from("posts").insert([
+        { title, nickname, image_name: fileName },
+      ]);
+
+      if (insertError) {
+        console.error("INSERTエラー", insertError);
+        statusDiv.textContent = `投稿情報の保存失敗: ${insertError.message}`;
+        return;
+      }
+
+      modal.style.display = "none";
+      fileInput.value = "";
+      nicknameInput.value = "";
+      titleInput.value = "";
+      statusDiv.textContent = "アップロード＆保存完了！";
+
+      loadImages();
+    });
+
+    // 画像読み込み
+    async function loadImages() {
+      console.log("loadImages開始");
+      imageListDiv.innerHTML = "";
+      statusDiv.textContent = "画像一覧を読み込み中…";
+
+      const { data, error } = await supabase.from("posts").select("*").order("id", { ascending: false });
+      console.log("取得したデータ:", data);
+      if (error) { statusDiv.textContent = `投稿一覧の取得失敗: ${error.message}`; return; }
+
       for (const post of data) {
-	console.log("チェック対象:", post.image_name);
-
         const isAccessible = await checkImageExists(post.image_name);
-
-	console.log("チェック結果:", isAccessible);
-
         if (!isAccessible) {
-          await supabase
-            .from("posts")
-            .delete()
-            .eq("image_name", post.image_name);
+          await supabase.from("posts").delete().eq("image_name", post.image_name);
           continue;
         }
 
-        const { data: urlData } = supabase.storage
-          .from(bucketName)
-          .getPublicUrl(post.image_name);
-
-	console.log("画像URL:", urlData.publicUrl);
-
+        const { data: urlData } = supabase.storage.from(bucketName).getPublicUrl(post.image_name);
         const wrapper = document.createElement("div");
         wrapper.className = "image-item";
 
@@ -293,7 +288,11 @@ loadImages();
       return !error;
     }
 
+    // ロード完了時
     window.addEventListener("load", () => {
+      const loadingScreen = document.getElementById("loading-screen");
+      loadingScreen.classList.add("hidden");
+      loadingScreen.addEventListener("transitionend", () => { loadingScreen.style.display = "none"; });
       loadImages();
     });
   </script>
