@@ -147,6 +147,7 @@
   </div>
 
   <button id="plusButton">＋</button>
+
   <div id="status"></div>
 
   <script type="module">
@@ -154,7 +155,7 @@
 
     const supabase = createClient(
       "https://hrtuyjkbchlkxzkzltak.supabase.co",
-      "YOUR_SUPABASE_ANON_KEY"
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhydHV5amtiY2hsa3h6a3psdGFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0NTc3NTQsImV4cCI6MjA3MDAzMzc1NH0.mShgkdKTBUBQA9M4YeVQUjEnLlpOXwBhShRJ-bGC-BM"
     );
 
     const bucketName = "images";
@@ -174,13 +175,17 @@
     });
 
     function closeModalOnOutsideTap(e) {
-      if (e.target === modal) modal.style.display = "none";
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
     }
 
+    // PC用クリック
     window.addEventListener("click", closeModalOnOutsideTap);
+    // スマホ用タップ
     window.addEventListener("touchstart", closeModalOnOutsideTap);
 
-    // JPEG変換
+    // JPEG変換関数
     async function convertToJpeg(file) {
       return new Promise((resolve) => {
         const reader = new FileReader();
@@ -192,9 +197,19 @@
             canvas.height = img.height;
             const ctx = canvas.getContext("2d");
             ctx.drawImage(img, 0, 0);
-            canvas.toBlob((blob) => {
-              resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", { type: "image/jpeg" }));
-            }, "image/jpeg", 0.8);
+            canvas.toBlob(
+              (blob) => {
+                resolve(
+                  new File(
+                    [blob],
+                    file.name.replace(/\.[^/.]+$/, "") + ".jpg",
+                    { type: "image/jpeg" }
+                  )
+                );
+              },
+              "image/jpeg",
+              0.8
+            );
           };
           img.src = e.target.result;
         };
@@ -202,7 +217,6 @@
       });
     }
 
-    // アップロード処理
     uploadBtn.addEventListener("click", async () => {
       let file = fileInput.files[0];
       const nickname = nicknameInput.value.trim();
@@ -221,15 +235,24 @@
       const fileName = `${Date.now()}_${file.name}`;
       statusDiv.textContent = "アップロード中…";
 
-      const { error: uploadError } = await supabase.storage.from(bucketName).upload(fileName, file);
+      const { error: uploadError } = await supabase.storage
+        .from(bucketName)
+        .upload(fileName, file);
+
       if (uploadError) {
         statusDiv.textContent = `アップロード失敗: ${uploadError.message}`;
         return;
       }
 
-      const { error: insertError } = await supabase.from("posts").insert([
-        { title, nickname, image_name: fileName },
-      ]);
+      const { error: insertError } = await supabase
+        .from("posts")
+        .insert([
+          {
+            title: title,
+            nickname: nickname,
+            image_name: fileName,
+          },
+        ]);
 
       if (insertError) {
         console.error("INSERTエラー", insertError);
@@ -246,24 +269,43 @@
       loadImages();
     });
 
-    // 画像読み込み
     async function loadImages() {
       console.log("loadImages開始");
       imageListDiv.innerHTML = "";
       statusDiv.textContent = "画像一覧を読み込み中…";
 
-      const { data, error } = await supabase.from("posts").select("*").order("id", { ascending: false });
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .order("id", { ascending: false });
+
       console.log("取得したデータ:", data);
-      if (error) { statusDiv.textContent = `投稿一覧の取得失敗: ${error.message}`; return; }
+
+      if (error) {
+        statusDiv.textContent = `投稿一覧の取得失敗: ${error.message}`;
+        return;
+      }
 
       for (const post of data) {
+        console.log("チェック対象:", post.image_name);
+
         const isAccessible = await checkImageExists(post.image_name);
+        console.log("チェック結果:", isAccessible);
+
         if (!isAccessible) {
-          await supabase.from("posts").delete().eq("image_name", post.image_name);
+          await supabase
+            .from("posts")
+            .delete()
+            .eq("image_name", post.image_name);
           continue;
         }
 
-        const { data: urlData } = supabase.storage.from(bucketName).getPublicUrl(post.image_name);
+        const { data: urlData } = supabase.storage
+          .from(bucketName)
+          .getPublicUrl(post.image_name);
+
+        console.log("画像URL:", urlData.publicUrl);
+
         const wrapper = document.createElement("div");
         wrapper.className = "image-item";
 
@@ -288,12 +330,17 @@
       return !error;
     }
 
-    // ロード完了時
+    // 読み込み画面表示5秒
     window.addEventListener("load", () => {
       const loadingScreen = document.getElementById("loading-screen");
-      loadingScreen.classList.add("hidden");
-      loadingScreen.addEventListener("transitionend", () => { loadingScreen.style.display = "none"; });
-      loadImages();
+      setTimeout(async () => {
+        loadingScreen.classList.add("hidden");
+        loadingScreen.addEventListener("transitionend", () => {
+          loadingScreen.style.display = "none";
+        });
+
+        await loadImages();
+      }, 5000);
     });
   </script>
 </body>
