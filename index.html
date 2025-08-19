@@ -35,7 +35,13 @@
       max-width: 100%;
       height: auto;
       border-radius: 8px;
+Opacity: 0;
+transition: opacity 1.2s ease-in;
     }
+
+.image-item img.loaded {
+  opacity: 1;
+}
 
     .image-item .info {
       text-align: center;
@@ -312,6 +318,10 @@
         const img = document.createElement("img");
         img.src = urlData.publicUrl;
         img.alt = post.title;
+
+img.onload = () => {
+  img.classList.add("loaded");
+};
 
         const info = document.createElement("div");
         info.className = "info";
