@@ -35,7 +35,7 @@
       max-width: 100%;
       height: auto;
       border-radius: 8px;
-Opacity: 0;
+opacity: 0;
 transition: opacity 1.2s ease-in;
     }
 
@@ -343,7 +343,7 @@ img.onload = () => {
     window.addEventListener("load", () => {
       const loadingScreen = document.getElementById("loading-screen");
 
-await loadImages();　//画像を全て読み込むまで待つ
+loadImages();　//画像を全て読み込むまで待つ
 
         loadingScreen.classList.add("hidden");
         loadingScreen.addEventListener("transitionend", () => {
