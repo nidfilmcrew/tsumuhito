@@ -109,16 +109,32 @@ transition: opacity 1.2s ease-in;
       z-index: 9999;
     }
 
-    #loading-screen h1 {
-      font-family: 'Zen Old Mincho', serif;
-      font-size: 2em;
-      animation: fadeBlink 1.5s infinite;
-    }
+    #loading-content h1 {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: 2em;
+  margin-bottom: 20px;
+}
 
-    @keyframes fadeBlink {
-      0%, 100% { opacity: 0.2; }
-      50% { opacity: 1; }
-    }
+.loading-bar {
+  width: 200px;           /* バーの横幅 */
+  height: 6px;            /* バーの高さ */
+  background: rgba(255, 255, 255, 0.3); /* 薄い下地 */
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 0 auto;         /* 中央揃え */
+}
+
+.loading-bar .progress {
+  width: 0;
+  height: 100%;
+  background: white;
+  animation: loadProgress 5s linear forwards;
+}
+
+@keyframes loadProgress {
+  from { width: 0; }
+  to { width: 100%; }
+}
 
     .hidden {
       opacity: 0;
@@ -130,11 +146,14 @@ transition: opacity 1.2s ease-in;
 <body>
 
   <!-- ローディング画面 -->
-  <div id="loading-screen">
-    <div id="loading-content">
-      <h1>loading…</h1>
+<div id="loading-screen">
+  <div id="loading-content">
+    <h1>摘む人</h1>
+    <div class="loading-bar">
+      <div class="progress"></div>
     </div>
   </div>
+</div>
 
   <h1>摘む人</h1>
 
@@ -346,13 +365,13 @@ img.onload = () => {
 // ギャラリー読み込み開始
 loadImages();
 
-// 3秒経過後にローディング画面を消す
+// 6秒経過後にローディング画面を消す
   setTimeout(() => {
     loadingScreen.classList.add("hidden");
     loadingScreen.addEventListener("transitionend", () => {
       loadingScreen.style.display = "none";
     });
-  }, 3000); // 3秒後
+  }, 6000); // 6秒後
 
         loadingScreen.classList.add("hidden");
         loadingScreen.addEventListener("transitionend", () => {
