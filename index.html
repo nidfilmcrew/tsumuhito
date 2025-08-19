@@ -343,7 +343,16 @@ img.onload = () => {
     window.addEventListener("load", () => {
       const loadingScreen = document.getElementById("loading-screen");
 
-loadImages();　//画像を全て読み込むまで待つ
+// ギャラリー読み込み開始
+loadImages();
+
+// 3秒経過後にローディング画面を消す
+  setTimeout(() => {
+    loadingScreen.classList.add("hidden");
+    loadingScreen.addEventListener("transitionend", () => {
+      loadingScreen.style.display = "none";
+    });
+  }, 3000); // 3秒後
 
         loadingScreen.classList.add("hidden");
         loadingScreen.addEventListener("transitionend", () => {
