@@ -109,32 +109,41 @@ transition: opacity 1.2s ease-in;
       z-index: 9999;
     }
 
-    #loading-content h1 {
-  font-family: 'Zen Old Mincho', serif;
-  font-size: 2em;
-  margin-bottom: 20px;
-}
+    /* 印画紙エリア */
+    #photo-paper {
+      width: 300px;
+      height: 200px;
+      background: white;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-.loading-bar {
-  width: 200px;           /* バーの横幅 */
-  height: 6px;            /* バーの高さ */
-  background: rgba(255, 255, 255, 0.3); /* 薄い下地 */
-  border-radius: 3px;
-  overflow: hidden;
-  margin: 0 auto;         /* 中央揃え */
-}
+    /* 摘む人のロゴ */
+    #photo-paper h1 {
+      font-family: 'Zen Old Mincho', serif;
+      font-size: 2em;
+      color: rgba(0,0,0,0); /* 最初は透明 */
+      animation: develop 5s ease forwards;
+    }
 
-.loading-bar .progress {
-  width: 0;
-  height: 100%;
-  background: white;
-  animation: loadProgress 5s linear forwards;
-}
-
-@keyframes loadProgress {
-  from { width: 0; }
-  to { width: 100%; }
-}
+    /* 現像アニメーション */
+    @keyframes develop {
+      0% {
+        color: rgba(0,0,0,0);
+        filter: blur(4px);
+      }
+      40% {
+        color: rgba(0,0,0,0.3);
+        filter: blur(2px);
+      }
+      100% {
+        color: rgba(0,0,0,1);
+        filter: blur(0);
+      }
+    }
 
     .hidden {
       opacity: 0;
@@ -147,11 +156,8 @@ transition: opacity 1.2s ease-in;
 
   <!-- ローディング画面 -->
 <div id="loading-screen">
-  <div id="loading-content">
+  <div id="photo-paper">
     <h1>摘む人</h1>
-    <div class="loading-bar">
-      <div class="progress"></div>
-    </div>
   </div>
 </div>
 
