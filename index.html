@@ -81,19 +81,20 @@ transition: opacity 1.2s ease-in;
     }
 
     #plusButton {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      font-size: 2em;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-    }
+  position: fixed;
+  bottom: 20px;
+  left: 50%;             /* 画面中央に配置 */
+  transform: translateX(-50%); /* 自分の幅の半分だけ左にずらして中央揃え */
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 2em;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
 
     input[type="text"], input[type="file"] {
       width: 100%;
