@@ -44,10 +44,21 @@ transition: opacity 1.2s ease-in;
 }
 
     .image-item .info {
-      text-align: center;
-      font-size: 0.9em;
-      margin-top: 0.3em;
-    }
+  text-align: center;
+  font-size: 0.9em;
+  margin-top: 0.3em;
+  line-height: 1.4; /* 改行時の余白を少し確保 */
+}
+
+.image-item .info .title {
+  font-weight: bold; /* タイトルを太字 */
+  display: block;    /* 改行 */
+}
+
+.image-item .info .nickname {
+  display: block;    /* 改行 */
+  color: #555;       /* ニックネームを落ち着いた色に */
+}
 
     #uploadModal {
       display: none;
@@ -365,7 +376,10 @@ img.onload = () => {
 
         const info = document.createElement("div");
         info.className = "info";
-        info.textContent = `${post.title}（投稿者: ${post.nickname}）`;
+        info.innerHTML = `
+  <span class="title">${post.title}</span>
+  <span class="nickname">${post.nickname}</span>
+`;
 
         wrapper.appendChild(img);
         wrapper.appendChild(info);
