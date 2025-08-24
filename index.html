@@ -121,29 +121,42 @@ transition: opacity 1.2s ease-in;
       align-items: center;
     }
 
-    /* 摘む人のロゴ */
-    #photo-paper h1 {
-      font-family: 'Zen Old Mincho', serif;
-      font-size: 2em;
-      color: rgba(0,0,0,0); /* 最初は透明 */
-      animation: develop 5s ease forwards;
-    }
+/* 黒背景＋文字をまとめるエリア */
+#photo-logo {
+  background: black;
+  padding: 20px 40px; /* 長方形の大きさ */
+  border-radius: 4px; /* 角を少し丸くする */
+  opacity: 0;
+  filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: revealLogo 5s ease forwards;
+}
 
-    /* 現像アニメーション */
-    @keyframes develop {
-      0% {
-        color: rgba(0,0,0,0);
-        filter: blur(4px);
-      }
-      40% {
-        color: rgba(0,0,0,0.3);
-        filter: blur(2px);
-      }
-      100% {
-        color: rgba(0,0,0,1);
-        filter: blur(0);
-      }
-    }
+/* 白文字 */
+#photo-logo h1 {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: 2em;
+  color: white;
+  margin: 0;
+}
+
+/* 浮かび上がるアニメーション */
+@keyframes revealLogo {
+  0% {
+    opacity: 0;
+    filter: blur(6px);
+  }
+  50% {
+    opacity: 0.5;
+    filter: blur(3px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
 
     .hidden {
       opacity: 0;
@@ -157,7 +170,9 @@ transition: opacity 1.2s ease-in;
   <!-- ローディング画面 -->
 <div id="loading-screen">
   <div id="photo-paper">
-    <h1>摘む人</h1>
+    <div id="photo-logo">
+  <h1>摘む人</h1>
+</div>
   </div>
 </div>
 
