@@ -8,16 +8,14 @@
 
   <style>
     body {
-      //font-family: Arial, sans-serif;
-	font-family: 'BIZ UDMincho', serif;
+      font-family: 'BIZ UDMincho', serif;
       max-width: 100%;
       margin: 0;
       padding-bottom: 80px;
     }
 
-    h1 {
+    h1, h2 {
       text-align: center;
-      margin-top: 1em;
       font-family: 'BIZ UDMincho', serif;
     }
 
@@ -35,32 +33,31 @@
     .image-item img {
       max-width: 100%;
       height: auto;
-      /* border-radius: 8px; */
-opacity: 0;
-transition: opacity 1.2s ease-in;
+      opacity: 0;
+      transition: opacity 1.2s ease-in;
     }
 
-.image-item img.loaded {
-  opacity: 1;
-}
+    .image-item img.loaded {
+      opacity: 1;
+    }
 
-   .image-item .info {
-  text-align: center;
-  font-size: 0.9em;
-  margin-top: 0.3em;
-  line-height: 1.4;
-  font-family: 'Sawarabi Gothic', sans-serif; /* ←ここ追加 */
-}
+    .image-item .info {
+      text-align: center;
+      font-size: 0.9em;
+      margin-top: 0.3em;
+      line-height: 1.4;
+      font-family: 'Sawarabi Gothic', sans-serif;
+    }
 
-.image-item .info .title {
-  font-weight: bold; /* タイトルを太字 */
-  display: block;    /* 改行 */
-}
+    .image-item .info .title {
+      font-weight: bold;
+      display: block;
+    }
 
-.image-item .info .nickname {
-  display: block;    /* 改行 */
-  color: #555;       /* ニックネームを落ち着いた色に */
-}
+    .image-item .info .nickname {
+      display: block;
+      color: #555;
+    }
 
     #uploadModal {
       display: none;
@@ -83,21 +80,21 @@ transition: opacity 1.2s ease-in;
     }
 
     #plusButton {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;             /* 画面中央に配置 */
-  transform: translateX(-50%); /* 自分の幅の半分だけ左にずらして中央揃え */
-  background: #8ea88f;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 2em;
-  cursor: pointer;
-text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-}
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #8ea88f;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 2em;
+      cursor: pointer;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
 
     input[type="text"], input[type="file"] {
       width: 100%;
@@ -124,7 +121,6 @@ text-shadow: 0 1px 2px rgba(0,0,0,0.5);
       z-index: 9999;
     }
 
-    /* 印画紙エリア */
     #photo-paper {
       width: 300px;
       height: 200px;
@@ -136,279 +132,233 @@ text-shadow: 0 1px 2px rgba(0,0,0,0.5);
       align-items: center;
     }
 
-/* 黒背景＋文字をまとめるエリア */
-#photo-logo {
-  background: #8ea88f;
-  width: 240px;
-  height: 160px;
-  opacity: 0;
-  filter: blur(6px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: revealLogo 5s ease forwards;
-}
-
-/* 白文字 */
-#photo-logo h1 {
-  font-family: 'BIZ UDMincho', serif;
-  font-size: 2em;
-  color: white;
-  margin: 0;
-}
-
-/* 浮かび上がるアニメーション */
-@keyframes revealLogo {
-  0% {
-    opacity: 0;
-    filter: blur(6px);
-  }
-  to {
-    opacity: 1;
-    filter: blur(0);
-  }
-}
-
-    .hidden {
+    #photo-logo {
+      background: #8ea88f;
+      width: 240px;
+      height: 160px;
       opacity: 0;
-      transition: opacity 0.5s ease-out;
-      pointer-events: none;
+      filter: blur(6px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: revealLogo 5s ease forwards;
     }
+
+    #photo-logo h1 {
+      font-family: 'BIZ UDMincho', serif;
+      font-size: 2em;
+      color: white;
+      margin: 0;
+    }
+
+    @keyframes revealLogo {
+      0% { opacity: 0; filter: blur(6px); }
+      to { opacity: 1; filter: blur(0); }
+    }
+
+    .hidden { opacity: 0; transition: opacity 0.5s ease-out; pointer-events: none; }
+
+    /* ハンバーガーメニュー */
+    #hamburger-menu {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 10000;
+    }
+
+    #hamburger-button {
+      font-size: 1.8em;
+      background: #8ea88f;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #menu {
+      position: fixed;
+      top: 60px;
+      left: 20px;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px 15px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    #menu.hidden { display: none; }
+
+    #menu ul { list-style: none; margin:0; padding:0; }
+    #menu li { margin: 8px 0; }
+    #menu li a { text-decoration: none; color: #333; }
+
+    html { scroll-behavior: smooth; }
+
+    /* 各セクションの余白 */
+    section { padding: 40px 20px; }
   </style>
 </head>
 <body>
 
-  <!-- ローディング画面 -->
+<!-- ハンバーガーメニュー -->
+<div id="hamburger-menu">
+  <button id="hamburger-button">☰</button>
+  <nav id="menu" class="hidden">
+    <ul>
+      <li><a href="#gallery-section">ギャラリー</a></li>
+      <li><a href="#story-section">ストーリー</a></li>
+      <li><a href="#poster-section">ポスター</a></li>
+      <li><a href="#comments-section">みんなのコメント</a></li>
+    </ul>
+  </nav>
+</div>
+
+<!-- ローディング画面 -->
 <div id="loading-screen">
   <div id="photo-paper">
     <div id="photo-logo">
-  <h1>摘む人</h1>
-</div>
-  </div>
-</div>
-
-  <h1>摘む人</h1>
-
-  <div id="image-list"></div>
-
-  <div id="uploadModal">
-    <div id="uploadModalContent">
-      <label>ニックネーム：</label><br />
-      <input type="text" id="nickname" placeholder="例：みーちゃん" /><br />
-      <label>タイトル：</label><br />
-      <input type="text" id="title" placeholder="例：昨日の空" /><br />
-      <label>画像を選択：</label><br />
-      <input type="file" id="file-input" accept="image/*" /><br />
-      <button id="upload-btn">アップロード</button>
+      <h1>摘む人</h1>
     </div>
   </div>
+</div>
 
-  <button id="plusButton">＋</button>
+<h1>摘む人</h1>
 
-  <div id="status"></div>
+<!-- ギャラリーセクション -->
+<section id="gallery-section">
+  <h2>ギャラリー</h2>
+  <div id="image-list"></div>
+  <a href="#more" id="more-link">もっと見る</a>
+</section>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+<!-- 追加コンテンツ -->
+<section id="story-section">
+  <h2>ストーリー</h2>
+  <p>ここにプロジェクトや展示の説明などを書きます。</p>
+</section>
 
-    const supabase = createClient(
-      "https://hrtuyjkbchlkxzkzltak.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhydHV5amtiY2hsa3h6a3psdGFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0NTc3NTQsImV4cCI6MjA3MDAzMzc1NH0.mShgkdKTBUBQA9M4YeVQUjEnLlpOXwBhShRJ-bGC-BM"
-    );
+<section id="poster-section">
+  <h2>ポスター</h2>
+  <img src="poster_example.jpg" alt="ポスター例" style="max-width:100%;"/>
+</section>
 
-    const bucketName = "images";
+<section id="comments-section">
+  <h2>みんなのコメント</h2>
+  <p>コメント例：とても楽しい展示でした！</p>
+</section>
 
-    const fileInput = document.getElementById("file-input");
-    const uploadBtn = document.getElementById("upload-btn");
-    const statusDiv = document.getElementById("status");
-    const imageListDiv = document.getElementById("image-list");
-    const nicknameInput = document.getElementById("nickname");
-    const titleInput = document.getElementById("title");
+<!-- アップロードモーダル -->
+<div id="uploadModal">
+  <div id="uploadModalContent">
+    <label>ニックネーム：</label><br />
+    <input type="text" id="nickname" placeholder="例：みーちゃん" /><br />
+    <label>タイトル：</label><br />
+    <input type="text" id="title" placeholder="例：昨日の空" /><br />
+    <label>画像を選択：</label><br />
+    <input type="file" id="file-input" accept="image/*" /><br />
+    <button id="upload-btn">アップロード</button>
+  </div>
+</div>
 
-    const modal = document.getElementById("uploadModal");
-    const plusBtn = document.getElementById("plusButton");
+<button id="plusButton">＋</button>
+<div id="status"></div>
 
-    plusBtn.addEventListener("click", () => {
-      modal.style.display = "flex";
-    });
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    function closeModalOnOutsideTap(e) {
-      if (e.target === modal) {
-        modal.style.display = "none";
-      }
-    }
+const supabase = createClient(
+  "https://hrtuyjkbchlkxzkzltak.supabase.co",
+  "YOUR_SUPABASE_KEY"
+);
 
-    // PC用クリック
-    window.addEventListener("click", closeModalOnOutsideTap);
-    // スマホ用タップ
-    window.addEventListener("touchstart", closeModalOnOutsideTap);
+const bucketName = "images";
 
-    // JPEG変換関数
-    async function convertToJpeg(file) {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const img = new Image();
-          img.onload = function () {
-            const canvas = document.createElement("canvas");
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0);
-            canvas.toBlob(
-              (blob) => {
-                resolve(
-                  new File(
-                    [blob],
-                    file.name.replace(/\.[^/.]+$/, "") + ".jpg",
-                    { type: "image/jpeg" }
-                  )
-                );
-              },
-              "image/jpeg",
-              0.8
-            );
-          };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
-    }
+const fileInput = document.getElementById("file-input");
+const uploadBtn = document.getElementById("upload-btn");
+const statusDiv = document.getElementById("status");
+const imageListDiv = document.getElementById("image-list");
+const nicknameInput = document.getElementById("nickname");
+const titleInput = document.getElementById("title");
 
-    uploadBtn.addEventListener("click", async () => {
-      let file = fileInput.files[0];
-      const nickname = nicknameInput.value.trim();
-      const title = titleInput.value.trim();
+const modal = document.getElementById("uploadModal");
+const plusBtn = document.getElementById("plusButton");
 
-      if (!file || !nickname || !title) {
-        statusDiv.textContent = "すべての項目を入力してください。";
-        return;
-      }
+plusBtn.addEventListener("click", () => { modal.style.display = "flex"; });
+window.addEventListener("click", e => { if(e.target===modal) modal.style.display="none"; });
+window.addEventListener("touchstart", e => { if(e.target===modal) modal.style.display="none"; });
 
-      if (!file.type.includes("jpeg") && !file.type.includes("jpg")) {
-        statusDiv.textContent = "画像を変換中…";
-        file = await convertToJpeg(file);
-      }
+// JPEG変換関数
+async function convertToJpeg(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width; canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img,0,0);
+        canvas.toBlob(blob => {
+          resolve(new File([blob], file.name.replace(/\.[^/.]+$/,"")+".jpg",{type:"image/jpeg"}));
+        },"image/jpeg",0.8);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
-      const fileName = `${Date.now()}_${file.name}`;
-      statusDiv.textContent = "アップロード中…";
+uploadBtn.addEventListener("click", async () => {
+  let file = fileInput.files[0];
+  const nickname = nicknameInput.value.trim();
+  const title = titleInput.value.trim();
+  if(!file||!nickname||!title){ statusDiv.textContent="すべての項目を入力してください。"; return; }
+  if(!file.type.includes("jpeg")&&!file.type.includes("jpg")) file = await convertToJpeg(file);
+  const fileName = `${Date.now()}_${file.name}`;
+  statusDiv.textContent="アップロード中…";
+  const { error: uploadError } = await supabase.storage.from(bucketName).upload(fileName,file);
+  if(uploadError){ statusDiv.textContent=`アップロード失敗: ${uploadError.message}`; return; }
+  const { error: insertError } = await supabase.from("posts").insert([{title,nickname,image_name:fileName}]);
+  if(insertError){ statusDiv.textContent=`投稿情報の保存失敗: ${insertError.message}`; return; }
+  modal.style.display="none";
+  fileInput.value=""; nicknameInput.value=""; titleInput.value="";
+  statusDiv.textContent="アップロード＆保存完了！";
+  loadImages();
+});
 
-      const { error: uploadError } = await supabase.storage
-        .from(bucketName)
-        .upload(fileName, file);
+async function loadImages() {
+  imageListDiv.innerHTML="";
+  const { data, error } = await supabase.from("posts").select("*").order("id",{ascending:false});
+  if(error){ statusDiv.textContent=`投稿一覧の取得失敗: ${error.message}`; return; }
+  for(const post of data){
+    const { data: urlData } = supabase.storage.from(bucketName).getPublicUrl(post.image_name);
+    const wrapper=document.createElement("div"); wrapper.className="image-item";
+    const img=document.createElement("img"); img.src=urlData.publicUrl; img.alt=post.title;
+    img.onload=()=>{img.classList.add("loaded");};
+    const info=document.createElement("div"); info.className="info";
+    info.innerHTML=`<span class="title">${post.title}</span><span class="nickname">${post.nickname}</span>`;
+    wrapper.appendChild(img); wrapper.appendChild(info);
+    imageListDiv.appendChild(wrapper);
+  }
+  statusDiv.textContent="";
+}
 
-      if (uploadError) {
-        statusDiv.textContent = `アップロード失敗: ${uploadError.message}`;
-        return;
-      }
-
-      const { error: insertError } = await supabase
-        .from("posts")
-        .insert([
-          {
-            title: title,
-            nickname: nickname,
-            image_name: fileName,
-          },
-        ]);
-
-      if (insertError) {
-        console.error("INSERTエラー", insertError);
-        statusDiv.textContent = `投稿情報の保存失敗: ${insertError.message}`;
-        return;
-      }
-
-      modal.style.display = "none";
-      fileInput.value = "";
-      nicknameInput.value = "";
-      titleInput.value = "";
-      statusDiv.textContent = "アップロード＆保存完了！";
-
-      loadImages();
-    });
-
-    async function loadImages() {
-      console.log("loadImages開始");
-      imageListDiv.innerHTML = "";
-      //statusDiv.textContent = "画像一覧を読み込み中…";
-
-      const { data, error } = await supabase
-        .from("posts")
-        .select("*")
-        .order("id", { ascending: false });
-
-      console.log("取得したデータ:", data);
-
-      if (error) {
-        statusDiv.textContent = `投稿一覧の取得失敗: ${error.message}`;
-        return;
-      }
-
-      for (const post of data) {
-        console.log("チェック対象:", post.image_name);
-
-        const isAccessible = await checkImageExists(post.image_name);
-        console.log("チェック結果:", isAccessible);
-
-        if (!isAccessible) {
-          await supabase
-            .from("posts")
-            .delete()
-            .eq("image_name", post.image_name);
-          continue;
-        }
-
-        const { data: urlData } = supabase.storage
-          .from(bucketName)
-          .getPublicUrl(post.image_name);
-
-        console.log("画像URL:", urlData.publicUrl);
-
-        const wrapper = document.createElement("div");
-        wrapper.className = "image-item";
-
-        const img = document.createElement("img");
-        img.src = urlData.publicUrl;
-        img.alt = post.title;
-
-img.onload = () => {
-  img.classList.add("loaded");
-};
-
-        const info = document.createElement("div");
-        info.className = "info";
-        info.innerHTML = `
-  <span class="title">${post.title}</span>
-  <span class="nickname">${post.nickname}</span>
-`;
-
-        wrapper.appendChild(img);
-        wrapper.appendChild(info);
-        imageListDiv.appendChild(wrapper);
-      }
-
-      statusDiv.textContent = "";
-    }
-
-    async function checkImageExists(imageName) {
-      const { data, error } = await supabase.storage.from(bucketName).download(imageName);
-      return !error;
-    }
-
-    window.addEventListener("load", () => {
-      const loadingScreen = document.getElementById("loading-screen");
-
-// ギャラリー読み込み開始
-loadImages();
-
-// 6秒経過後にローディング画面を消す
-  setTimeout(() => {
+// ローディング画面
+window.addEventListener("load", ()=>{
+  const loadingScreen = document.getElementById("loading-screen");
+  loadImages();
+  setTimeout(()=>{
     loadingScreen.classList.add("hidden");
-    loadingScreen.addEventListener("transitionend", () => {
-      loadingScreen.style.display = "none";
-    });
-  }, 6000); // 6秒後
+    loadingScreen.addEventListener("transitionend",()=>{loadingScreen.style.display="none";});
+  },6000);
+});
 
-    });
-  </script>
+// ハンバーガーメニュー開閉
+const hamburgerBtn = document.getElementById("hamburger-button");
+const menu = document.getElementById("menu");
+hamburgerBtn.addEventListener("click",()=>{ menu.classList.toggle("hidden"); });
+
+</script>
 </body>
 </html>
