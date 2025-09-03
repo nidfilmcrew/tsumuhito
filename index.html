@@ -1,134 +1,58 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>摘む人</title>
-<link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
-<style>
-body { font-family: 'BIZ UDMincho', serif; margin:0; padding-bottom:80px; }
-h1 { text-align:center; margin-top:1em; font-family:'BIZ UDMincho', serif; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>摘む人</title>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&display=swap" rel="stylesheet">
 
-#image-list { column-count: 2; column-gap: 1em; padding: 1em; }
-.image-item { break-inside: avoid; margin-bottom:1em; }
-.image-item img { max-width:100%; height:auto; opacity:0; transition:opacity 1.2s ease-in; }
-.image-item img.loaded { opacity:1; }
-.image-item .info { text-align:center; font-size:0.9em; margin-top:0.3em; line-height:1.4; font-family:'Sawarabi Gothic',sans-serif;}
-.image-item .info .title { font-weight:bold; display:block; }
-.image-item .info .nickname { display:block; color:#555; }
+  <style>
+    body {
+      font-family: 'BIZ UDMincho', serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-#plusButton { position: fixed; bottom: 20px; left:50%; transform:translateX(-50%); background:#8ea88f; color:white; border:none; border-radius:50%; width:60px; height:60px; font-size:2em; cursor:pointer; text-shadow:0 1px 2px rgba(0,0,0,0.5); box-shadow:0 4px 8px rgba(0,0,0,0.3); }
+    #photo-paper {
+      width: 300px;
+      height: 200px;
+      background: #8ea88f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 0;
+    }
 
-#more-link { display:block; text-align:center; margin: 1em 0; font-family:'Sawarabi Gothic',sans-serif; font-size:0.9em; text-decoration:none; color:#8ea88f; }
+    #photo-paper h1 {
+      font-size: 2em;
+      color: white;
+      margin: 0;
+    }
 
-#uploadModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; }
-#uploadModalContent { background:white; padding:1em; border-radius:10px; width:90%; max-width:400px; }
+    /* アニメーション */
+    #photo-paper {
+      opacity: 0;
+      filter: blur(6px);
+      animation: reveal 2s forwards;
+    }
 
-/* ローディング画面 */
-#loading-screen { position:fixed; top:0; left:0; width:100%; height:100%; background-color:#f0f0f0; color:#333; display:flex; justify-content:center; align-items:center; z-index:9999; }
-#photo-paper { width:300px; height:200px; background:white; border:1px solid #ddd; box-shadow:0 4px 12px rgba(0,0,0,0.15); display:flex; justify-content:center; align-items:center; }
-#photo-logo { background:#8ea88f; width:240px; height:160px; opacity:0; filter:blur(6px); display:flex; justify-content:center; align-items:center; animation:revealLogo 5s ease forwards; }
-#photo-logo h1 { font-family:'BIZ UDMincho', serif; font-size:2em; color:white; margin:0; }
-@keyframes revealLogo { 0% { opacity:0; filter:blur(6px); } to { opacity:1; filter:blur(0); } }
-.hidden { opacity:0; transition:opacity 0.5s ease-out; pointer-events:none; }
-</style>
+    @keyframes reveal {
+      to {
+        opacity: 1;
+        filter: blur(0);
+      }
+    }
+  </style>
+  <meta http-equiv="refresh" content="3; url=home/">
 </head>
 <body>
-
-<!-- ローディング画面 -->
-<div id="loading-screen">
   <div id="photo-paper">
-    <div id="photo-logo"><h1>摘む人</h1></div>
+    <h1>摘む人</h1>
   </div>
-</div>
-
-<h1>摘む人</h1>
-
-<div id="image-list"></div>
-<a href="gallery.html" id="more-link">もっと見る →</a>
-
-<div id="uploadModal">
-  <div id="uploadModalContent">
-    <label>ニックネーム：</label><br />
-    <input type="text" id="nickname" placeholder="例：みーちゃん" /><br />
-    <label>タイトル：</label><br />
-    <input type="text" id="title" placeholder="例：昨日の空" /><br />
-    <label>画像を選択：</label><br />
-    <input type="file" id="file-input" accept="image/*" /><br />
-    <button id="upload-btn">アップロード</button>
-  </div>
-</div>
-
-<button id="plusButton">＋</button>
-
-<script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-const supabase = createClient("https://hrtuyjkbchlkxzkzltak.supabase.co","YOUR_SUPABASE_KEY");
-const bucketName="images";
-
-const fileInput=document.getElementById("file-input");
-const uploadBtn=document.getElementById("upload-btn");
-const imageListDiv=document.getElementById("image-list");
-const nicknameInput=document.getElementById("nickname");
-const titleInput=document.getElementById("title");
-const modal=document.getElementById("uploadModal");
-const plusBtn=document.getElementById("plusButton");
-
-plusBtn.addEventListener("click",()=>{ modal.style.display="flex"; });
-
-function closeModalOnOutsideTap(e){ if(e.target===modal){ modal.style.display="none"; } }
-window.addEventListener("click",closeModalOnOutsideTap);
-window.addEventListener("touchstart",closeModalOnOutsideTap);
-
-async function convertToJpeg(file){
-  return new Promise(resolve=>{
-    const reader=new FileReader();
-    reader.onload=function(e){
-      const img=new Image();
-      img.onload=function(){
-        const canvas=document.createElement("canvas");
-        canvas.width=img.width; canvas.height=img.height;
-        const ctx=canvas.getContext("2d");
-        ctx.drawImage(img,0,0);
-        canvas.toBlob(blob=>{
-          resolve(new File([blob],file.name.replace(/\.[^/.]+$/,"")+".jpg",{type:"image/jpeg"}));
-        },"image/jpeg",0.8);
-      }; img.src=e.target.result;
-    }; reader.readAsDataURL(file);
-  });
-}
-
-uploadBtn.addEventListener("click",async()=>{
-  let file=fileInput.files[0];
-  const nickname=nicknameInput.value.trim();
-  const title=titleInput.value.trim();
-  if(!file||!nickname||!title){ return; }
-  if(!file.type.includes("jpeg")&&!file.type.includes("jpg")){ file=await convertToJpeg(file); }
-
-  const fileName=`${Date.now()}_${file.name}`;
-  await supabase.storage.from(bucketName).upload(fileName,file);
-  await supabase.from("posts").insert([{title,nickname,image_name:fileName}]);
-  modal.style.display="none"; fileInput.value=""; nicknameInput.value=""; titleInput.value="";
-  loadImages();
-});
-
-async function loadImages(){
-  imageListDiv.innerHTML="";
-  const { data, error }=await supabase.from("posts").select("*").order("id",{ascending:false}).limit(6);
-  if(error){ console.error(error); return; }
-  for(const post of data){
-    const { data: urlData }=supabase.storage.from(bucketName).getPublicUrl(post.image_name);
-    const wrapper=document.createElement("div"); wrapper.className="image-item";
-    const img=document.createElement("img"); img.src=urlData.publicUrl; img.alt=post.title;
-    img.onload=()=>{ img.classList.add("loaded"); };
-    const info=document.createElement("div"); info.className="info";
-    info.innerHTML=`<span class="title">${post.title}</span><span class="nickname">${post.nickname}</span>`;
-    wrapper.appendChild(img); wrapper.appendChild(info); imageListDiv.appendChild(wrapper);
-  }
-}
-
-window.addEventListener("load",loadImages);
-</script>
-
 </body>
 </html>

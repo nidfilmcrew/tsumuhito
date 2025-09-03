@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>摘む人 - Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'BIZ UDMincho', serif;
+      margin: 0;
+      padding: 1em;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    p {
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 1em auto;
+    }
+
+    section {
+      margin-bottom: 2em;
+    }
+
+    /* ギャラリーセクション */
+    #home-gallery {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    #home-gallery h2 {
+      text-align: center;
+    }
+
+    .home-image-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5em;
+    }
+
+    .home-image-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 0; /* 角丸なし */
+    }
+
+    .more-link {
+      display: block;
+      text-align: center;
+      margin-top: 0.5em;
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    /* ハンバーガーメニュー */
+    #menuButton {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 2em;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    #menuList {
+      display: none;
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      background: white;
+      border: 1px solid #ddd;
+      padding: 1em;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+    }
+
+    #menuList a {
+      display: block;
+      margin-bottom: 0.5em;
+      text-decoration: none;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="menuButton">☰</div>
+  <div id="menuList">
+    <a href="#story">ストーリー</a>
+    <a href="#poster">ポスター</a>
+    <a href="#home-gallery">ギャラリー</a>
+    <a href="../gallery/">もっと見るギャラリー</a>
+  </div>
+
+  <h1>摘む人</h1>
+
+  <section id="story">
+    <h2>ストーリー</h2>
+    <p>ここにストーリーの説明を入れます。</p>
+  </section>
+
+  <section id="poster">
+    <h2>ポスター</h2>
+    <img src="poster.jpg" alt="ポスター" style="max-width:100%;">
+  </section>
+
+  <!-- Homeギャラリー -->
+  <section id="home-gallery">
+    <h2>ギャラリー</h2>
+    <div class="home-image-list" id="home-image-list"></div>
+    <a href="../gallery/" class="more-link">もっと見る →</a>
+  </section>
+
+  <script type="module">
+    const menuButton = document.getElementById('menuButton');
+    const menuList = document.getElementById('menuList');
+    menuButton.addEventListener('click', () => {
+      if(menuList.style.display === 'block') {
+        menuList.style.display = 'none';
+        menuButton.textContent = '☰';
+      } else {
+        menuList.style.display = 'block';
+        menuButton.textContent = '×';
+      }
+    });
+
+    // Homeページ用ギャラリー
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+    const supabase = createClient('https://YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+    const homeImageListDiv = document.getElementById("home-image-list");
+
+    async function loadHomeGallery() {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .order("id", { ascending: false })
+        .limit(6); // ←最新6件だけ表示
+
+      if(error) return console.error(error);
+
+      homeImageListDiv.innerHTML = "";
+
+      data.forEach(post => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "home-image-item";
+
+        const img = document.createElement("img");
+        const { data: urlData } = supabase.storage.from("images").getPublicUrl(post.image_name);
+        img.src = urlData.publicUrl;
+        img.alt = post.title;
+
+        wrapper.appendChild(img);
+        homeImageListDiv.appendChild(wrapper);
+      });
+    }
+
+    window.addEventListener("load", loadHomeGallery);
+  </script>
+</body>
+</html>
