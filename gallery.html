@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>摘む人 - ギャラリー</title>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>摘む人</h1>
+  <div class="subtitle">ギャラリー</div>
+
+  <div id="image-list"></div>
+
+  <!-- プラスボタンとモーダルはギャラリーページだけ -->
+  <div id="uploadModal">
+    <div id="uploadModalContent">
+      <label>ニックネーム：</label><br />
+      <input type="text" id="nickname" placeholder="例：みーちゃん" /><br />
+      <label>タイトル：</label><br />
+      <input type="text" id="title" placeholder="例：昨日の空" /><br />
+      <label>画像を選択：</label><br />
+      <input type="file" id="file-input" accept="image/*" /><br />
+      <button id="upload-btn">アップロード</button>
+    </div>
+  </div>
+
+  <button id="plusButton">＋</button>
+
+  <div id="status"></div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
