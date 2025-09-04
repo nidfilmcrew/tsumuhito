@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>摘む人 - Loading</title>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      font-family: 'BIZ UDMincho', serif;
+    }
+
+    #photo-paper {
+      width: 300px;
+      height: 200px;
+      background: white;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #photo-logo {
+      background: #8ea88f;
+      width: 240px;
+      height: 160px;
+      opacity: 0;
+      filter: blur(6px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: revealLogo 5s ease forwards;
+    }
+
+    #photo-logo h1 {
+      font-size: 2em;
+      color: white;
+      margin: 0;
+    }
+
+    @keyframes revealLogo {
+      0% {
+        opacity: 0;
+        filter: blur(6px);
+      }
+      100% {
+        opacity: 1;
+        filter: blur(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="photo-paper">
+    <div id="photo-logo">
+      <h1>摘む人</h1>
+    </div>
+  </div>
+
+  <script>
+    // 6秒後に home/index.html へ移動
+    setTimeout(() => {
+      window.location.href = "home/index.html";
+    }, 6000);
+  </script>
+</body>
+</html>
