@@ -4,66 +4,213 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>摘む人</title>
-  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       font-family: 'BIZ UDMincho', serif;
       background-color: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
     }
 
-    #photo-paper {
-      width: 300px;
-      height: 200px;
-      background: white;
-      border: 1px solid #ddd;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    section {
+      padding: 3em 1em;
     }
 
-    #photo-logo {
-      background: #8ea88f;
-      width: 240px;
-      height: 160px;
+    h2 {
+      text-align: center;
+      font-family: 'BIZ UDMincho', serif;
+      margin-bottom: 1em;
+    }
+
+    /* ハンバーガー */
+    .menu-btn {
+      position: fixed;
+      top: 15px;
+      left: 20px;
+      z-index: 1000;
+      cursor: pointer;
+    }
+    .menu-btn div {
+      width: 25px;
+      height: 3px;
+      background: #000;
+      margin: 5px;
+      transition: 0.4s;
+    }
+    .menu-btn.open div:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .menu-btn.open div:nth-child(2) {
       opacity: 0;
-      filter: blur(6px);
-      display: flex;
-      justify-content: center;
+    }
+    .menu-btn.open div:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* メニュー */
+    .menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      display: none;
+      flex-direction: column;
       align-items: center;
-      animation: revealLogo 3s ease forwards;
+      justify-content: center;
+      z-index: 999;
+    }
+    .menu a {
+      font-size: 1.5em;
+      padding: 1em;
+      text-decoration: none;
+      color: #000;
+      border-top: 1px solid #ccc;
+      width: 100%;
+      text-align: center;
+    }
+    .menu a:last-child {
+      border-bottom: 1px solid #ccc;
     }
 
-    #photo-logo h1 {
-      font-size: 2em;
-      color: white;
-      margin: 0;
+    /* Gallery */
+    #image-list {
+      column-count: 2;
+      column-gap: 1em;
+    }
+    .image-item {
+      break-inside: avoid;
+      margin-bottom: 1em;
+    }
+    .image-item img {
+      max-width: 100%;
+      opacity: 0;
+      transition: opacity 1.2s ease-in;
+    }
+    .image-item img.loaded { opacity: 1; }
+    .info {
+      text-align: center;
+      font-family: 'Sawarabi Gothic', sans-serif;
+      margin-top: 0.3em;
+      font-size: 0.9em;
+    }
+    .info .title { font-weight: bold; display: block; }
+    .info .nickname { color: #555; display: block; }
+
+    .more-link {
+      display: block;
+      text-align: center;
+      margin-top: 1em;
+      font-family: 'Sawarabi Gothic', sans-serif;
     }
 
-    @keyframes revealLogo {
-      0% { opacity: 0; filter: blur(6px); }
-      100% { opacity: 1; filter: blur(0); }
+    /* About */
+    #about img {
+      display: block;
+      max-width: 100%;
+      margin: 0 auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Credit */
+    #credit {
+      font-family: 'Sawarabi Gothic', sans-serif;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
     }
   </style>
 </head>
 <body>
-  <div id="photo-paper">
-    <div id="photo-logo">
-      <h1>摘む人</h1>
-    </div>
-  </div>
 
-  <script>
-    // 3.5秒後に home/index.html に移動
-    setTimeout(() => {
-      window.location.href = "home/index.html";
-    }, 3500);
-  </script>
+<!-- ハンバーガー -->
+<div class="menu-btn" id="menu-btn">
+  <div></div><div></div><div></div>
+</div>
+<div class="menu" id="menu">
+  <a href="#gallery">Gallery</a>
+  <a href="#about">About</a>
+  <a href="#credit">Credit</a>
+</div>
+
+<!-- Gallery -->
+<section id="gallery">
+  <h2>Gallery</h2>
+  <div id="image-list"></div>
+  <a href="gallery.html" class="more-link">もっと見る</a>
+</section>
+
+<!-- About -->
+<section id="about">
+  <h2>About</h2>
+  <img src="摘む人キービジュアル最新３.jpg" alt="ポスター">
+</section>
+
+<!-- Credit -->
+<section id="credit">
+  <h2>Credit</h2>
+  <p>
+    山田博行先生　ヨールグ・ビューラー先生　山本信一先生<br>
+    坂野陽菜　若林佐宇<br><br>
+    プロデューサー：文平望結<br>
+    写真投稿サイト：野澤実来<br>
+    キービジュアル：天勝千咲子<br>
+    アシスタント：渡辺ひかり<br>
+    監督：髙橋悠<br>
+    原案：水 /渡辺武郎　空 /小林心詠　植物 /金尾宥良<br>
+    音声：髙橋悠<br>
+    撮影：髙橋優　渡辺武郎<br>
+    撮影助手：池田耀一<br>
+    編集：髙橋悠<br>
+    キャスト：野澤実来　天勝千咲子　渡辺武郎　文平望結<br><br>
+    Special Thanks
+  </p>
+</section>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+  const supabase = createClient(
+    "https://hrtuyjkbchlkxzkzltak.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  );
+  const bucketName = "images";
+
+  async function loadImages() {
+    const imageList = document.getElementById("image-list");
+    imageList.innerHTML = "";
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*")
+      .order("id", { ascending: false })
+      .limit(6);
+    if (error) return;
+    for (const post of data) {
+      const { data: urlData } = supabase.storage.from(bucketName).getPublicUrl(post.image_name);
+      const wrapper = document.createElement("div");
+      wrapper.className = "image-item";
+      const img = document.createElement("img");
+      img.src = urlData.publicUrl;
+      img.onload = () => img.classList.add("loaded");
+      const info = document.createElement("div");
+      info.className = "info";
+      info.innerHTML = `<span class="title">${post.title}</span><span class="nickname">${post.nickname}</span>`;
+      wrapper.appendChild(img);
+      wrapper.appendChild(info);
+      imageList.appendChild(wrapper);
+    }
+  }
+  loadImages();
+
+  // ハンバーガー
+  const menuBtn = document.getElementById("menu-btn");
+  const menu = document.getElementById("menu");
+  menuBtn.addEventListener("click", () => {
+    menuBtn.classList.toggle("open");
+    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+  });
+</script>
+
 </body>
 </html>

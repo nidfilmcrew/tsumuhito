@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gallery - 摘む人</title>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'BIZ UDMincho', serif;
+      background-color: #f0f0f0;
+    }
+    h1 {
+      text-align: center;
+      margin: 1em 0;
+    }
+    .image-list {
+      column-count: 2;
+      column-gap: 1em;
+      padding: 1em;
+    }
+    .image-item {
+      break-inside: avoid;
+      margin-bottom: 1em;
+    }
+    .image-item img {
+      max-width: 100%;
+      height: auto;
+      opacity: 0;
+      transition: opacity 1.2s ease-in;
+    }
+    .image-item img.loaded { opacity: 1; }
+    .info {
+      text-align: center;
+      font-family: 'Sawarabi Gothic', sans-serif;
+      font-size: 0.9em;
+      margin-top: 0.3em;
+    }
+    .info .title { font-weight: bold; display: block; }
+    .info .nickname { color: #555; display: block; }
+  </style>
+</head>
+<body>
+  <h1>Gallery</h1>
+  <div class="image-list" id="image-list"></div>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const supabase = createClient(
+      "https://hrtuyjkbchlkxzkzltak.supabase.co",
+      "YOUR_PUBLIC_ANON_KEY"
+    );
+    const bucketName = "images";
+
+    async function loadImages() {
+      const imageListDiv = document.getElementById("image-list");
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .order("id", { ascending: false });
+
+      if (error) {
+        console.error("画像取得エラー:", error.message);
+        return;
+      }
+
+      imageListDiv.innerHTML = "";
+      for (const post of data) {
+        const { data: urlData } = supabase.storage
+          .from(bucketName)
+          .getPublicUrl(post.image_name);
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "image-item";
+
+        const img = document.createElement("img");
+        img.src = urlData.publicUrl;
+        img.onload = () => img.classList.add("loaded");
+
+        const info = document.createElement("div");
+        info.className = "info";
+        info.innerHTML = `
+          <span class="title">${post.title}</span>
+          <span class="nickname">${post.nickname}</span>
+        `;
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(info);
+        imageListDiv.appendChild(wrapper);
+      }
+    }
+    loadImages();
+  </script>
+</body>
+</html>
