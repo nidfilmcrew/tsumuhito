@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>摘む人 - Gallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'BIZ UDMincho', serif;
+      margin: 0;
+      padding-bottom: 80px;
+    }
+
+    #image-list {
+      column-count: 2;
+      column-gap: 1em;
+      padding: 1em;
+    }
+
+    .image-item {
+      break-inside: avoid;
+      margin-bottom: 1em;
+    }
+
+    .image-item img {
+      max-width: 100%;
+      height: auto;
+      opacity: 0;
+      transition: opacity 1.2s ease-in;
+    }
+
+    .image-item img.loaded { opacity: 1; }
+
+    .image-item .info {
+      text-align: center;
+      font-size: 0.9em;
+      margin-top: 0.3em;
+      line-height: 1.4;
+      font-family: 'Sawarabi Gothic', sans-serif;
+    }
+
+    .image-item .info .title { font-weight:bold; display:block; }
+    .image-item .info .nickname { display:block; color:#555; }
+
+    #plusButton {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #8ea88f;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 2em;
+      cursor: pointer;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <h1>ギャラリー</h1>
+  <div id="image-list"></div>
+  <button id="plusButton">＋</button>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+    const supabase = createClient('https://…', 'PUBLIC_ANON_KEY');
+    const bucketName = 'images';
+    const imageListDiv = document.getElementById("image-list");
+    const plusBtn = document.getElementById("plusButton");
+
+    plusBtn.addEventListener("click", () => {
+      // ここでアップロードモーダル表示処理
+      alert("アップロードボタン押されました");
+    });
+
+    async function loadImages() {
+      const { data, error } = await supabase.from("posts").select("*").order("id",{ascending:false});
+      if(error) return;
+      imageListDiv.innerHTML = "";
+      data.forEach(post=>{
+        const wrapper = document.createElement("div");
+        wrapper.className = "image-item";
+        const img = document.createElement("img");
+        img.src = supabase.storage.from(bucketName).getPublicUrl(post.image_name).data.publicUrl;
+        img.onload = ()=>{img.classList.add("loaded");};
+        const info = document.createElement("div");
+        info.className="info";
+        info.innerHTML=`<span class="title">${post.title}</span><span class="nickname">${post.nickname}</span>`;
+        wrapper.appendChild(img);
+        wrapper.appendChild(info);
+        imageListDiv.appendChild(wrapper);
+      });
+    }
+
+    window.addEventListener("load", loadImages);
+  </script>
+</body>
+</html>
