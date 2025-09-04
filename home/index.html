@@ -1,58 +1,25 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>摘む人</title>
-  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&display=swap" rel="stylesheet">
-
-  <style>
-    body {
-      font-family: 'BIZ UDMincho', serif;
-      margin: 0;
-      padding: 0;
-      background: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    #photo-paper {
-      width: 300px;
-      height: 200px;
-      background: #8ea88f;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 0;
-    }
-
-    #photo-paper h1 {
-      font-size: 2em;
-      color: white;
-      margin: 0;
-    }
-
-    /* アニメーション */
-    #photo-paper {
-      opacity: 0;
-      filter: blur(6px);
-      animation: reveal 2s forwards;
-    }
-
-    @keyframes reveal {
-      to {
-        opacity: 1;
-        filter: blur(0);
-      }
-    }
-  </style>
-  <meta http-equiv="refresh" content="3; url=home/">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>摘む人 - ホーム</title>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-  <div id="photo-paper">
-    <h1>摘む人</h1>
+
+  <h1>摘む人</h1>
+  <div class="subtitle">ギャラリー</div>
+
+  <div id="image-list"></div>
+
+  <div style="text-align:center; margin:1em;">
+    <a href="../gallery.html">もっと見る</a>
   </div>
+
+  <div id="status"></div>
+
+  <script type="module" src="../script.js"></script>
 </body>
 </html>
