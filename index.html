@@ -3,44 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-<<<<<<< HEAD
   <title>摘む人</title>
-  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-  <!-- ローディング画面 -->
-  <div id="loading-screen">
-    <div id="photo-paper">
-      <div id="photo-logo">
-        <h1>摘む人</h1>
-      </div>
-    </div>
-  </div>
-
-  <!-- ホームに飛ばす -->
-  <script>
-    setTimeout(() => {
-      window.location.href = "./home/";
-    }, 6000); // 6秒後にhomeへ
-  </script>
-
-</body>
-</html>
-=======
-  <title>摘む人 - Loading</title>
   <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&display=swap" rel="stylesheet">
 
   <style>
     body {
       margin: 0;
+      font-family: 'BIZ UDMincho', serif;
+      background-color: #f0f0f0;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #f0f0f0;
-      font-family: 'BIZ UDMincho', serif;
     }
 
     #photo-paper {
@@ -63,7 +37,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      animation: revealLogo 5s ease forwards;
+      animation: revealLogo 3s ease forwards;
     }
 
     #photo-logo h1 {
@@ -73,14 +47,8 @@
     }
 
     @keyframes revealLogo {
-      0% {
-        opacity: 0;
-        filter: blur(6px);
-      }
-      100% {
-        opacity: 1;
-        filter: blur(0);
-      }
+      0% { opacity: 0; filter: blur(6px); }
+      100% { opacity: 1; filter: blur(0); }
     }
   </style>
 </head>
@@ -92,11 +60,10 @@
   </div>
 
   <script>
-    // 6秒後に home/index.html へ移動
+    // 3.5秒後に home/index.html に移動
     setTimeout(() => {
       window.location.href = "home/index.html";
-    }, 6000);
+    }, 3500);
   </script>
 </body>
 </html>
->>>>>>> e8f88837ecbb882ac24254bcaee5395f972e94fc
