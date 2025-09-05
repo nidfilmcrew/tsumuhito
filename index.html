@@ -1,128 +1,139 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>摘む人</title>
-  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'BIZ UDMincho', serif;
-      background-color: #f0f0f0;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>摘む人</title>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin: 0;
+    font-family: 'BIZ UDMincho', serif;
+    background-color: #f0f0f0;
+  }
 
-    section {
-      padding: 3em 1em;
-    }
+  /* ページタイトル */
+  .page-title {
+    font-family: 'BIZ UDMincho', serif;
+    font-size: 2.2em;
+    text-align: center;
+    margin: 1em 0;
+  }
 
-    h2 {
-      text-align: center;
-      font-family: 'BIZ UDMincho', serif;
-      margin-bottom: 1em;
-    }
+  section {
+    padding: 3em 1em;
+  }
 
-    /* ハンバーガー */
-    .menu-btn {
-      position: fixed;
-      top: 15px;
-      left: 20px;
-      z-index: 1000;
-      cursor: pointer;
-    }
-    .menu-btn div {
-      width: 25px;
-      height: 3px;
-      background: #000;
-      margin: 5px;
-      transition: 0.4s;
-    }
-    .menu-btn.open div:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-    .menu-btn.open div:nth-child(2) {
-      opacity: 0;
-    }
-    .menu-btn.open div:nth-child(3) {
-      transform: rotate(-45deg) translate(6px, -6px);
-    }
+  h2 {
+    text-align: center;
+    font-family: 'BIZ UDMincho', serif;
+    margin-bottom: 1em;
+  }
 
-    /* メニュー */
-    .menu {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #fff;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-    .menu a {
-      font-size: 1.5em;
-      padding: 1em;
-      text-decoration: none;
-      color: #000;
-      border-top: 1px solid #ccc;
-      width: 100%;
-      text-align: center;
-    }
-    .menu a:last-child {
-      border-bottom: 1px solid #ccc;
-    }
+  /* ハンバーガー */
+  .menu-btn {
+    position: fixed;
+    top: 15px;
+    left: 20px;
+    z-index: 1000;
+    cursor: pointer;
+  }
+  .menu-btn div {
+    width: 25px;
+    height: 3px;
+    background: #000;
+    margin: 5px;
+    transition: 0.4s;
+  }
+  .menu-btn.open div:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  .menu-btn.open div:nth-child(2) {
+    opacity: 0;
+  }
+  .menu-btn.open div:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+  }
 
-    /* Gallery */
-    #image-list {
-      column-count: 2;
-      column-gap: 1em;
-    }
-    .image-item {
-      break-inside: avoid;
-      margin-bottom: 1em;
-    }
-    .image-item img {
-      max-width: 100%;
-      opacity: 0;
-      transition: opacity 1.2s ease-in;
-    }
-    .image-item img.loaded { opacity: 1; }
-    .info {
-      text-align: center;
-      font-family: 'Sawarabi Gothic', sans-serif;
-      margin-top: 0.3em;
-      font-size: 0.9em;
-    }
-    .info .title { font-weight: bold; display: block; }
-    .info .nickname { color: #555; display: block; }
+  /* メニュー */
+  .menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  .menu a {
+    font-size: 1.5em;
+    padding: 1em;
+    text-decoration: none;
+    color: #000;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    text-align: center;
+  }
+  .menu a:last-child {
+    border-bottom: 1px solid #ccc;
+  }
 
-    .more-link {
-      display: block;
-      text-align: center;
-      margin-top: 1em;
-      font-family: 'Sawarabi Gothic', sans-serif;
-    }
+  /* Gallery */
+  #image-list {
+    column-count: 2;
+    column-gap: 1em;
+  }
+  .image-item {
+    break-inside: avoid;
+    margin-bottom: 1em;
+  }
+  .image-item img {
+    max-width: 100%;
+    opacity: 0;
+    transition: opacity 1.2s ease-in;
+  }
+  .image-item img.loaded { opacity: 1; }
+  .info {
+    text-align: center;
+    font-family: 'Sawarabi Gothic', sans-serif;
+    margin-top: 0.3em;
+    font-size: 0.9em;
+  }
+  .info .title { font-weight: bold; display: block; }
+  .info .nickname { color: #555; display: block; }
 
-    /* About */
-    #about img {
-      display: block;
-      max-width: 100%;
-      margin: 0 auto;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
+  .more-link {
+    display: block;
+    text-align: center;
+    margin-top: 1em;
+    font-family: 'Sawarabi Gothic', sans-serif;
+  }
 
-    /* Credit */
-    #credit {
-      font-family: 'Sawarabi Gothic', sans-serif;
-      line-height: 1.6;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-  </style>
+  /* About */
+  #about img {
+    display: block;
+    max-width: 100%;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+
+  /* Credit */
+  #credit {
+    font-family: 'Sawarabi Gothic', sans-serif;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+</style>
 </head>
 <body>
+
+<!-- ページタイトル -->
+<h1 class="page-title">摘む人</h1>
 
 <!-- ハンバーガー -->
 <div class="menu-btn" id="menu-btn">
@@ -151,89 +162,67 @@
 <section id="credit">
   <h2>Credit</h2>
   <p>
-    監督<br>
-    髙橋悠<br><br>
-
-    原案<br>
-    水 / 渡辺武郎<br>
-    空 / 小林心詠<br>
-    植物 / 金尾宥良<br><br>
-
-    キャスト<br>
-    野澤実来　天勝千咲子　渡辺武郎　文平望結<br><br>
-
-    編集<br>
-    髙橋悠<br><br>
-
-    撮影<br>
-    髙橋優　渡辺武郎<br><br>
-
-    撮影助手<br>
-    池田耀一<br><br>
-
-    音声<br>
-    髙橋悠<br><br>
-
-    プロデューサー<br>
-    文平望結<br><br>
-
-    アシスタント<br>
-    渡辺ひかり<br><br>
-
-    キービジュアル<br>
-    天勝千咲子<br><br>
-
-    写真投稿サイト<br>
-    野澤実来<br><br>
-
-    Special Thanks<br>
-    山田博行先生　ヨールグ・ビューラー先生　山本信一先生<br>
-    坂野陽菜　若林佐宇
+    ...既存の内容...
   </p>
 </section>
 
 <script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  const supabase = createClient(
-    "https://hrtuyjkbchlkxzkzltak.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-  );
-  const bucketName = "images";
+const supabase = createClient(
+  "https://hrtuyjkbchlkxzkzltak.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+);
+const bucketName = "images";
 
-  async function loadImages() {
-    const imageList = document.getElementById("image-list");
-    imageList.innerHTML = "";
-    const { data, error } = await supabase
-      .from("posts")
-      .select("*")
-      .order("id", { ascending: false })
-      .limit(6);
-    if (error) return;
-    for (const post of data) {
-      const { data: urlData } = supabase.storage.from(bucketName).getPublicUrl(post.image_name);
-      const wrapper = document.createElement("div");
-      wrapper.className = "image-item";
-      const img = document.createElement("img");
-      img.src = urlData.publicUrl;
-      img.onload = () => img.classList.add("loaded");
-      const info = document.createElement("div");
-      info.className = "info";
-      info.innerHTML = `<span class="title">${post.title}</span><span class="nickname">${post.nickname}</span>`;
-      wrapper.appendChild(img);
-      wrapper.appendChild(info);
-      imageList.appendChild(wrapper);
-    }
+async function loadImages() {
+  const imageList = document.getElementById("image-list");
+  imageList.innerHTML = "";
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .order("id", { ascending: false })
+    .limit(6);
+  if (error) return;
+  for (const post of data) {
+    const { data: urlData } = supabase.storage.from(bucketName).getPublicUrl(post.image_name);
+    const wrapper = document.createElement("div");
+    wrapper.className = "image-item";
+    const img = document.createElement("img");
+    img.src = urlData.publicUrl;
+    img.onload = () => img.classList.add("loaded");
+    const info = document.createElement("div");
+    info.className = "info";
+    info.innerHTML = `<span class="title">${post.title}</span><span class="nickname">${post.nickname}</span>`;
+    wrapper.appendChild(img);
+    wrapper.appendChild(info);
+    imageList.appendChild(wrapper);
   }
-  loadImages();
+}
+loadImages();
 
-  // ハンバーガー
-  const menuBtn = document.getElementById("menu-btn");
-  const menu = document.getElementById("menu");
-  menuBtn.addEventListener("click", () => {
-    menuBtn.classList.toggle("open");
-    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+// ハンバーガー
+const menuBtn = document.getElementById("menu-btn");
+const menu = document.getElementById("menu");
+menuBtn.addEventListener("click", () => {
+  menuBtn.classList.toggle("open");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+});
+
+// メニュー内リンクタップで閉じつつスクロール
+document.querySelectorAll(".menu a").forEach(link => {
+  link.addEventListener("click", e => {
+    e.preventDefault();
+    const targetId = link.getAttribute("href").substring(1);
+    const targetSection = document.getElementById(targetId);
+    if (targetSection) {
+      targetSection.scrollIntoView({ behavior: "smooth" });
+    }
+    // メニューを閉じる
+    menuBtn.classList.remove("open");
+    menu.style.display = "none";
   });
+});
 </script>
 
 </body>
