@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>摘む人ギャラリー</title>
+<script src="https://unpkg.com/@supabase/supabase-js"></script>
+<style>
+  body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+
+  #gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .item {
+    border: 1px solid #ccc;
+    padding: 5px;
+    text-align: center;
+    background: #fafafa;
+    border-radius: 5px;
+  }
+  .item img { width: 100%; height: auto; border-radius: 5px; }
+
+  #uploadBtn {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    font-size: 40px; cursor: pointer;
+    background: #4CAF50; color: white;
+    border-radius: 50%; width: 60px; height: 60px;
+    text-align: center; line-height: 60px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    z-index: 1001;
+  }
+
+  #uploadForm {
+    display: none;
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: white; border: 1px solid #ccc;
+    padding: 20px; z-index: 1002;
+    width: 90%; max-width: 400px; border-radius: 10px;
+  }
+  #overlay {
+    display: none; position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+    z-index: 1000;
+  }
+
+  @media screen and (min-width: 601px) and (max-width: 900px) {
+    #gallery { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media screen and (min-width: 901px) and (max-width: 1200px) {
+    #gallery { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media screen and (min-width: 1201px) {
+    #gallery { grid-template-columns: repeat(5, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div id="gallery"></div>
+
+<div id="overlay"></div>
+
+<div id="uploadForm">
+  <h3>画像アップロード</h3>
+  <input type="file" id="fileInput" accept="image/*"><br><br>
+  <input type="text" id="titleInput" placeholder="タイトル"><br><br>
+  <input type="text" id="nameInput" placeholder="ニックネーム"><br><br>
+  <button id="submitBtn">投稿</button>
+  <button id="closeBtn">閉じる</button>
+</div>
+
+<div id="uploadBtn">＋</div>
+
+<script type="module">
+  // Supabase SDK を読み込み
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+
+  // Supabase 接続設定
+  const supabaseUrl = "https://vgjsvfyhaufbzfmbecec.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZnanN2ZnloYXVmYnpmbWJlY2VjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwODI2MTEsImV4cCI6MjA3MjY1ODYxMX0.nceH2n5YiTgcTbM4PgEMf98qJmh6SWS_k5kOo3sqyf8";
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  const gallery = document.getElementById('gallery');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const uploadForm = document.getElementById('uploadForm');
+  const overlay = document.getElementById('overlay');
+  const closeBtn = document.getElementById('closeBtn');
+  const submitBtn = document.getElementById('submitBtn');
+
+  uploadBtn.onclick = () => { uploadForm.style.display = 'block'; overlay.style.display = 'block'; }
+  closeBtn.onclick = () => { uploadForm.style.display = 'none'; overlay.style.display = 'none'; }
+  overlay.onclick = closeBtn.onclick;
+
+  // 投稿処理
+  submitBtn.onclick = async () => {
+    const file = document.getElementById('fileInput').files[0];
+    const title = document.getElementById('titleInput').value.trim();
+    const name = document.getElementById('nameInput').value.trim();
+
+    if (!file || !title || !name) {
+      alert("全部入力してください");
+      return;
+    }
+
+    // Cloudinary にアップロード
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'tsumuhito_unsigned'); // ← さっき作ったプリセット名
+    const cloudName = 'dmof2f1qt';
+
+    try {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+
+      if (!data.secure_url) {
+        alert("Cloudinaryアップロードに失敗しました");
+        return;
+      }
+
+      const imageUrl = data.secure_url;
+
+      // Supabase に保存
+      const { error } = await supabase.from("posts").insert([
+        {
+          title: title,
+          nickname: name,
+          image_url: imageUrl
+          // created_at はデフォルト値 (now()) が自動で入る
+        }
+      ]);
+
+      if (error) {
+        console.error(error);
+        alert("Supabaseへの保存に失敗しました");
+        return;
+      }
+
+      // ギャラリーに即反映
+      const div = document.createElement('div');
+      div.className = 'item';
+      div.innerHTML = `<img src="${imageUrl}" alt="${title}"><p>${title}</p><p>${name}</p>`;
+      gallery.prepend(div);
+
+      // フォームリセット
+      document.getElementById('fileInput').value = '';
+      document.getElementById('titleInput').value = '';
+      document.getElementById('nameInput').value = '';
+      uploadForm.style.display = 'none';
+      overlay.style.display = 'none';
+
+    } catch (err) {
+      alert("アップロード全体に失敗しました");
+      console.error(err);
+    }
+  };
+
+  // ページ読み込み時に Supabase から全部取得して表示
+  async function loadGallery() {
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    gallery.innerHTML = "";
+    data.forEach(post => {
+      const div = document.createElement('div');
+      div.className = 'item';
+      div.innerHTML = `<img src="${post.image_url}" alt="${post.title}"><p>${post.title}</p><p>${post.nickname}</p>`;
+      gallery.appendChild(div);
+    });
+  }
+
+  loadGallery(); // 初回ロード時に実行
+</script>
+
+</body>
+</html>
