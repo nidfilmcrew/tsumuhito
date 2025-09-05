@@ -6,19 +6,29 @@
   <title>摘む人</title>
   <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
   <style>
+    /* ===== ホーム画面と統一 ===== */
     body {
       margin: 0;
       font-family: 'BIZ UDMincho', serif;
-      background-color: #f0f0f0;
+      background-color: #fdfdfd;
+      color: #111;
     }
 
     h1 {
       text-align: center;
       margin-top: 1em;
-      font-family: 'BIZ UDMincho', serif;
+      font-size: 2em;
     }
 
-    /* ハンバーガー */
+    h2 {
+      text-align: center;
+      font-family: 'Sawarabi Gothic', sans-serif;
+      font-weight: normal;
+      margin-top: 0.2em;
+      color: #444;
+    }
+
+    /* ===== ハンバーガー ===== */
     .menu-btn {
       position: fixed;
       top: 15px;
@@ -29,8 +39,8 @@
     .menu-btn div {
       width: 25px;
       height: 3px;
-      background: #000;
-      margin: 5px;
+      background: #111;
+      margin: 5px 0;
       transition: 0.4s;
     }
     .menu-btn.open div:nth-child(1) {
@@ -60,16 +70,16 @@
       font-size: 1.5em;
       padding: 1em;
       text-decoration: none;
-      color: #000;
-      border-top: 1px solid #ccc;
+      color: #111;
+      border-top: 1px solid #eee;
       width: 100%;
       text-align: center;
     }
     .menu a:last-child {
-      border-bottom: 1px solid #ccc;
+      border-bottom: 1px solid #eee;
     }
 
-    /* Gallery */
+    /* ===== ギャラリー ===== */
     #image-list {
       column-count: 2;
       column-gap: 1em;
@@ -78,12 +88,16 @@
     .image-item {
       break-inside: avoid;
       margin-bottom: 1em;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
     }
     .image-item img {
       max-width: 100%;
-      height: auto;
+      display: block;
       opacity: 0;
-      transition: opacity 1.2s ease-in;
+      transition: opacity 1s ease-in;
     }
     .image-item img.loaded {
       opacity: 1;
@@ -91,26 +105,24 @@
     .image-item .info {
       text-align: center;
       font-size: 0.9em;
-      margin-top: 0.3em;
+      margin: 0.5em 0;
       line-height: 1.4;
       font-family: 'Sawarabi Gothic', sans-serif;
+      color: #555;
     }
     .image-item .info .title {
       font-weight: bold;
       display: block;
-    }
-    .image-item .info .nickname {
-      display: block;
-      color: #555;
+      color: #222;
     }
 
-    /* プラスボタン */
+    /* ===== プラスボタン ===== */
     #plusButton {
       position: fixed;
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: #222; /* 黒に近いグレー */
+      background: #222;
       color: white;
       border: none;
       border-radius: 50%;
@@ -120,9 +132,10 @@
       cursor: pointer;
       text-shadow: 0 1px 2px rgba(0,0,0,0.5);
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      z-index: 500;
     }
 
-    /* モーダル */
+    /* ===== 投稿モーダル ===== */
     #uploadModal {
       display: none;
       position: fixed;
@@ -133,11 +146,12 @@
       background: rgba(0,0,0,0.5);
       justify-content: center;
       align-items: center;
+      z-index: 1000;
     }
     #uploadModalContent {
-      background: white;
+      background: #fff;
       padding: 1em;
-      border-radius: 10px;
+      border-radius: 12px;
       width: 90%;
       max-width: 400px;
     }
@@ -149,6 +163,7 @@
     #status {
       text-align: center;
       margin-top: 1em;
+      font-family: 'Sawarabi Gothic', sans-serif;
     }
   </style>
 </head>
@@ -163,7 +178,7 @@
 </div>
 
 <h1>摘む人</h1>
-<h2 style="text-align:center; font-family:'Sawarabi Gothic', sans-serif;">Gallery</h2>
+<h2>Gallery</h2>
 
 <div id="image-list"></div>
 
@@ -185,87 +200,97 @@
 <div id="status"></div>
 
 <script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  const supabase = createClient(
-    "https://hrtuyjkbchlkxzkzltak.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhydHV5amtiY2hsa3h6a3psdGFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0NTc3NTQsImV4cCI6MjA3MDAzMzc1NH0.mShgkdKTBUBQA9M4YeVQUjEnLlpOXwBhShRJ-bGC-BM"
-  );
+const supabase = createClient(
+  "https://hrtuyjkbchlkxzkzltak.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhydHV5amtiY2hsa3psdGFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0NTc3NTQsImV4cCI6MjA3MDAzMzc1NH0.mShgkdKTBUBQA9M4YeVQUjEnLlpOXwBhShRJ-bGC-BM"
+);
 
-  const bucketName = "images";
-  const fileInput = document.getElementById("file-input");
-  const uploadBtn = document.getElementById("upload-btn");
-  const statusDiv = document.getElementById("status");
-  const imageListDiv = document.getElementById("image-list");
-  const nicknameInput = document.getElementById("nickname");
-  const titleInput = document.getElementById("title");
-  const modal = document.getElementById("uploadModal");
-  const plusBtn = document.getElementById("plusButton");
+const bucketName = "images";
+const fileInput = document.getElementById("file-input");
+const uploadBtn = document.getElementById("upload-btn");
+const statusDiv = document.getElementById("status");
+const imageListDiv = document.getElementById("image-list");
+const nicknameInput = document.getElementById("nickname");
+const titleInput = document.getElementById("title");
+const modal = document.getElementById("uploadModal");
+const plusBtn = document.getElementById("plusButton");
 
-  // ハンバーガー
-  const menuBtn = document.getElementById("menu-btn");
-  const menu = document.getElementById("menu");
-  menuBtn.addEventListener("click", () => {
-    menuBtn.classList.toggle("open");
-    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-  });
+// ハンバーガー
+const menuBtn = document.getElementById("menu-btn");
+const menu = document.getElementById("menu");
+menuBtn.addEventListener("click", () => {
+  menuBtn.classList.toggle("open");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+});
 
-  plusBtn.addEventListener("click", () => {
-    modal.style.display = "flex";
-  });
+// プラスボタン
+plusBtn.addEventListener("click", () => { modal.style.display = "flex"; });
+window.addEventListener("click", e => { if(e.target===modal) modal.style.display="none"; });
+window.addEventListener("touchstart", e => { if(e.target===modal) modal.style.display="none"; });
 
-  window.addEventListener("click", (e) => { if(e.target===modal) modal.style.display="none"; });
-  window.addEventListener("touchstart", (e) => { if(e.target===modal) modal.style.display="none"; });
-
-  async function convertToJpeg(file) {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const img = new Image();
-        img.onload = function () {
-          const canvas = document.createElement("canvas");
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0);
-          canvas.toBlob((blob)=>{
-            resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", { type: "image/jpeg" }));
-          }, "image/jpeg", 0.8);
-        };
-        img.src = e.target.result;
+async function convertToJpeg(file){
+  return new Promise(resolve=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        const canvas=document.createElement("canvas");
+        canvas.width=img.width; canvas.height=img.height;
+        const ctx=canvas.getContext("2d");
+        ctx.drawImage(img,0,0);
+        canvas.toBlob(blob=>{
+          resolve(new File([blob], file.name.replace(/\.[^/.]+$/,"")+".jpg", {type:"image/jpeg"}));
+        },"image/jpeg",0.8);
       };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  uploadBtn.addEventListener("click", async () => {
-    let file = fileInput.files[0];
-    const nickname = nicknameInput.value.trim();
-    const title = titleInput.value.trim();
-    if (!file || !nickname || !title) { statusDiv.textContent="すべての項目を入力してください。"; return; }
-    if (!file.type.includes("jpeg") && !file.type.includes("jpg")) { statusDiv.textContent="画像を変換中…"; file = await convertToJpeg(file); }
-
-    const fileName = `${Date.now()}_${file.name}`;
-    statusDiv.textContent="アップロード中…";
-
-    const { error: uploadError } = await supabase.storage.from(bucketName).upload(fileName, file);
-    if(uploadError){ statusDiv.textContent=`アップロード失敗: ${uploadError.message}`; return; }
-
-    const { error: insertError } = await supabase.from("posts").insert([{ title, nickname, image_name: fileName }]);
-    if(insertError){ statusDiv.textContent=`投稿情報の保存失敗: ${insertError.message}`; return; }
-
-    modal.style.display="none";
-    fileInput.value=""; nicknameInput.value=""; titleInput.value="";
-    statusDiv.textContent="アップロード＆保存完了！";
-    loadImages();
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
   });
+}
 
-  async function loadImages() {
-    imageListDiv.innerHTML="";
-    const { data, error } = await supabase.from("posts").select("*").order("id",{ascending:false});
-    if(error){ statusDiv.textContent=`投稿一覧の取得失敗: ${error.message}`; return; }
+uploadBtn.addEventListener("click", async ()=>{
+  let file=fileInput.files[0];
+  const nickname=nicknameInput.value.trim();
+  const title=titleInput.value.trim();
+  if(!file||!nickname||!title){ statusDiv.textContent="すべての項目を入力してください"; return; }
+  if(!file.type.includes("jpeg")&&!file.type.includes("jpg")){ file=await convertToJpeg(file); }
 
-    for(const post of data){
-      const { data: urlData } = supabase.storage.from(bucketName).getPublicUrl(post.image_name);
-      const wrapper = document.createElement("div"); wrapper.className="image-item";
-      const img=document.createElement("img
+  const fileName=`${Date.now()}_${file.name}`;
+  statusDiv.textContent="アップロード中…";
+
+  const { error: uploadError } = await supabase.storage.from(bucketName).upload(fileName,file);
+  if(uploadError){ statusDiv.textContent=`アップロード失敗: ${uploadError.message}`; return; }
+
+  const { error: insertError } = await supabase.from("posts").insert([{title,nickname,image_name:fileName}]);
+  if(insertError){ statusDiv.textContent=`投稿情報保存失敗: ${insertError.message}`; return; }
+
+  modal.style.display="none";
+  fileInput.value=""; nicknameInput.value=""; titleInput.value="";
+  statusDiv.textContent="アップロード完了！";
+  loadImages();
+});
+
+async function loadImages(){
+  imageListDiv.innerHTML="";
+  const { data, error } = await supabase.from("posts").select("*").order("id",{ascending:false});
+  if(error){ statusDiv.textContent=`投稿一覧の取得失敗: ${error.message}`; return; }
+
+  for(const post of data){
+    const { data: urlData } = supabase.storage.from(bucketName).getPublicUrl(post.image_name);
+    const wrapper=document.createElement("div"); wrapper.className="image-item";
+    const img=document.createElement("img"); img.src=urlData.publicUrl; img.alt=post.title;
+    img.onload=()=>img.classList.add("loaded");
+    const info=document.createElement("div"); info.className="info";
+    info.innerHTML=`<span class="title">${post.title}</span><span class="nickname">${post.nickname}</span>`;
+    wrapper.appendChild(img); wrapper.appendChild(info);
+    imageListDiv.appendChild(wrapper);
+  }
+}
+
+// 初回読み込み
+window.addEventListener("load", loadImages);
+</script>
+</body>
+</html>
