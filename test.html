@@ -1,25 +1,57 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>Supabase Test</title>
-</head>
-<body>
 <script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+const gallery = document.getElementById('gallery');
+const uploadBtn = document.getElementById('uploadBtn');
+const uploadForm = document.getElementById('uploadForm');
+const overlay = document.getElementById('overlay');
+const closeBtn = document.getElementById('closeBtn');
+const submitBtn = document.getElementById('submitBtn');
 
-const supabase = createClient(
-  "https://hrtuyjkbchlkxzkzltak.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhydHV5amtiY2hsa3psdGFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0NTc3NTQsImV4cCI6MjA3MDAzMzc1NH0.mShgkdKTBUBQA9M4YeVQUjEnLlpOXwBhShRJ-bGC-BM"
-);
+uploadBtn.onclick = () => { uploadForm.style.display = 'block'; overlay.style.display = 'block'; }
+closeBtn.onclick = () => { uploadForm.style.display = 'none'; overlay.style.display = 'none'; }
+overlay.onclick = closeBtn.onclick;
 
-async function testPosts() {
-  const { data, error } = await supabase.from("posts").select("*");
-  console.log("data:", data);
-  console.log("error:", error);
-}
+submitBtn.onclick = async () => {
+  const file = document.getElementById('fileInput').files[0];
+  const title = document.getElementById('titleInput').value.trim();
+  const name = document.getElementById('nameInput').value.trim();
+  if(!file || !title || !name){ alert("全部入力してください"); return; }
 
-testPosts();
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'tsumuhito_unsigned'); // Unsigned preset
+  const cloudName = 'dmof2f1qt'; // Mint-chanのCloud name
+
+  try {
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      const imageUrl = data.secure_url; // アップロードURL
+      console.log("✅ アップロード成功:", imageUrl);
+
+      // ギャラリーに追加
+      const div = document.createElement('div');
+      div.className = 'item';
+      div.innerHTML = `<img src="${imageUrl}" alt="${title}"><p>${title}</p><p>${name}</p>`;
+      gallery.prepend(div);
+
+      // フォームリセット
+      document.getElementById('fileInput').value = '';
+      document.getElementById('titleInput').value = '';
+      document.getElementById('nameInput').value = '';
+      uploadForm.style.display = 'none';
+      overlay.style.display = 'none';
+    } else {
+      console.error("❌ Cloudinaryエラー:", data);
+      alert("Cloudinary アップロードに失敗しました: " + (data.error?.message || "不明なエラー"));
+    }
+
+  } catch(err) {
+    console.error("❌ ネットワークエラー:", err);
+    alert("Cloudinary への通信に失敗しました");
+  }
+};
 </script>
-</body>
-</html>
