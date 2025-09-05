@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Supabase Test</title>
+</head>
+<body>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const supabase = createClient(
+  "https://hrtuyjkbchlkxzkzltak.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhydHV5amtiY2hsa3psdGFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0NTc3NTQsImV4cCI6MjA3MDAzMzc1NH0.mShgkdKTBUBQA9M4YeVQUjEnLlpOXwBhShRJ-bGC-BM"
+);
+
+async function testPosts() {
+  const { data, error } = await supabase.from("posts").select("*");
+  console.log("data:", data);
+  console.log("error:", error);
+}
+
+testPosts();
+</script>
+</body>
+</html>
