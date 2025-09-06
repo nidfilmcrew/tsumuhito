@@ -14,7 +14,6 @@
 
     h1 {
       text-align: center;
-      font-family: 'BIZ UDMincho', serif;
       font-size: 2.5em;
       margin: 1em 0;
     }
@@ -25,7 +24,6 @@
 
     h2 {
       text-align: center;
-      font-family: 'BIZ UDMincho', serif;
       margin-bottom: 1em;
     }
 
@@ -81,6 +79,15 @@
       border-bottom: 1px solid #ccc;
     }
 
+    /* ポスター */
+    .poster {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto 2em auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
     /* Gallery */
     #image-list {
       column-count: 2;
@@ -126,16 +133,14 @@
     }
 
     /* About */
-    #about img {
-      display: block;
-      max-width: 100%;
-      margin: 0 auto;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    #about p {
+      text-align: center;
+      font-size: 1.2em;
+      color: #888;
     }
 
     /* Credit */
     #credit .credit-content {
-      font-family: 'BIZ UDMincho', serif;
       text-align: center;
       line-height: 1.8;
       max-width: 600px;
@@ -157,12 +162,14 @@
   <a href="#credit">Credit</a>
 </div>
 
+<!-- ポスター（タイトルとGalleryの間） -->
+<img src="keyvisual3.jpg" alt="ポスター" class="poster">
+
 <!-- Gallery -->
 <section id="gallery">
   <h2>Gallery</h2>
   <p style="text-align:center; max-width:600px; margin:0 auto 2em;">
-    あなたの身の回りにある「幸せ」はなんですか？写真に撮って、
-このギャラリーに投稿してみましょう。<br>
+    ここはみんなの「幸せ」が集まるギャラリー。あなたの身の回りにある「幸せ」はなんですか？<br>
     ※投稿された写真は展示会場（ガレージ）でも展示されます。<br>
     ※不特定多数の方に見られる可能性を考慮して投稿してください。
   </p>
@@ -182,7 +189,7 @@
 <!-- About -->
 <section id="about">
   <h2>About</h2>
-  <img src="keyvisual3.jpg" alt="ポスター" style="display:block;max-width:100%;height:auto;margin:0 auto;box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+  <p>coming soon...</p>
 </section>
 
 <!-- Credit -->
@@ -251,7 +258,7 @@
       info.innerHTML = `<span class="title">${post.title}</span><span class="nickname">${post.nickname}</span>`;
       wrapper.appendChild(img);
       wrapper.appendChild(info);
-      imageList.appendChild(wrapper);3
+      imageList.appendChild(wrapper);
     }
   }
   loadImages();
