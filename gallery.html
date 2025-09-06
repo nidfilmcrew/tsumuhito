@@ -24,14 +24,15 @@
     font-size: 1.5em; 
   }
 
-  p.description {
-    text-align: center;
-    font-family: 'Sawarabi Gothic', sans-serif;
-    margin-top: 0.5em;
-    margin-bottom: 2em;
-    line-height: 1.5em;
-    white-space: pre-line; /* 改行を反映 */
-    font-size: 0.95em;
+  /* 左揃えテキスト（セクション中央配置） */
+  .left-text {
+    text-align: left;       /* 文章は左揃え */
+    max-width: 600px;       /* セクション内で横幅を制限 */
+    margin: 0 auto 2em;     /* 上下余白を少し＆中央配置 */
+    line-height: 1.5em;     /* 元の description の行間に合わせる */
+    font-family: 'Sawarabi Gothic', sans-serif; /* 元のフォント */
+    font-size: 0.95em;      /* 元の大きさ */
+    white-space: pre-line;  /* 改行を反映 */
   }
 
   #gallery {
@@ -146,7 +147,7 @@
 
 <h1>摘む人</h1>
 <h2>Gallery</h2>
-<p class="description">
+<p class="left-text">
 ここはみんなの「幸せ」が集まるギャラリーです。
 下のプラスボタンから投稿できます。
 ※投稿された写真は展示会場（ガレージ）でも展示されます。
