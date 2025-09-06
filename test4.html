@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>摘む人</title>
+  <style>
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: #333;
+      text-align: center;
+    }
+
+    header {
+      padding: 1em;
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin: 0.2em 0;
+    }
+
+    h2 {
+      margin-top: 1.5em;
+      font-size: 1.5em;
+    }
+
+    /* ポスター */
+    .poster {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto 1em auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Gallery */
+    #gallery p {
+      margin: 0.5em auto 1.5em auto;
+      max-width: 90%;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #444;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1em;
+      padding: 1em;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 0;
+    }
+
+    .gallery-item h3 {
+      margin: 0.3em 0 0;
+      font-size: 1em;
+    }
+
+    .gallery-item p {
+      margin: 0.2em 0 0;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    /* プラスボタン */
+    .plus-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #b2b5a3;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 2em;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    /* ハンバーガーメニュー */
+    .menu-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      cursor: pointer;
+      z-index: 1100;
+    }
+
+    .menu-btn div {
+      width: 30px;
+      height: 4px;
+      background: #333;
+      margin: 6px 0;
+      transition: 0.4s;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .menu a {
+      display: block;
+      padding: 10px 20px;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .menu a:hover {
+      background: #f0f0f0;
+    }
+
+    /* About */
+    #about p {
+      font-size: 1.2em;
+      color: #888;
+    }
+
+    /* Credit */
+    #credit {
+      padding: 2em 1em;
+      background: #fff;
+      margin-top: 2em;
+    }
+
+    #credit h2 {
+      margin-bottom: 1em;
+    }
+
+    #credit p {
+      margin: 0.5em 0;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>摘む人</h1>
+  </header>
+
+  <!-- ポスター -->
+  <img src="keyvisual3.jpg" alt="ポスター" class="poster">
+
+  <!-- ハンバーガーメニュー -->
+  <div class="menu-btn" id="menu-btn">
+    <div></div><div></div><div></div>
+  </div>
+  <div class="menu" id="menu">
+    <a href="#gallery">Gallery</a>
+    <a href="#about">About</a>
+    <a href="#credit">Credit</a>
+  </div>
+
+  <!-- Gallery -->
+  <section id="gallery">
+    <h2>Gallery</h2>
+    <p>
+      あなたの身の回りにある「幸せ」はなんですか？写真に撮って、このギャラリーに投稿してみましょう。<br>
+      ※投稿された写真は展示会場（ガレージ）でも展示されます。<br>
+      ※不特定多数の方に見られる可能性を考慮して投稿してください。
+    </p>
+    <div class="gallery" id="gallery-container">
+      <!-- 投稿写真がここに入る -->
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <h2>About</h2>
+    <p>coming soon...</p>
+  </section>
+
+  <!-- Credit -->
+  <section id="credit">
+    <h2>Credit</h2>
+    <p>監督<br>高橋悠</p>
+    <p>原案<br>水 / 渡辺武郎　空 / 小林心詠　植物 / 金尾宥良</p>
+    <p>キャスト<br>野澤実来　天勝千咲子　渡辺武郎　文平望結</p>
+    <p>編集<br>高橋悠</p>
+    <p>撮影<br>高橋悠　渡辺武郎</p>
+    <p>撮影助手<br>池田耀一</p>
+    <p>音声<br>高橋悠</p>
+    <p>写真<br>高橋悠</p>
+    <p>プロデューサー<br>文平望結</p>
+    <p>アシスタント<br>渡辺ひかり</p>
+    <p>キービジュアル<br>天勝千咲子</p>
+    <p>写真投稿サイト<br>野澤実来</p>
+    <p>Special Thanks<br>山田博行先生　ヨールグ・ビューラー先生　山本信一先生<br>
+      坂野陽菜　若林佐宇</p>
+  </section>
+
+  <!-- プラスボタン -->
+  <button class="plus-btn" id="plus-btn">+</button>
+
+  <script>
+    // ハンバーガーメニュー動作
+    const menuBtn = document.getElementById("menu-btn");
+    const menu = document.getElementById("menu");
+
+    menuBtn.addEventListener("click", () => {
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    });
+
+    // メニュークリックで閉じる & スクロール
+    document.querySelectorAll(".menu a").forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute("href"));
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth" });
+        }
+        menu.style.display = "none";
+      });
+    });
+  </script>
+</body>
+</html>
