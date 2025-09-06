@@ -112,6 +112,19 @@
       font-family: 'Sawarabi Gothic', sans-serif;
     }
 
+    /* 固定3枚画像 */
+    .fixed-images {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+      margin: 2em 0;
+      flex-wrap: wrap;
+    }
+    .fixed-images img {
+      max-width: 30%;
+      height: auto;
+    }
+
     /* About */
     #about img {
       display: block;
@@ -147,14 +160,28 @@
 <!-- Gallery -->
 <section id="gallery">
   <h2>Gallery</h2>
+  <p style="text-align:center; max-width:600px; margin:0 auto 2em;">
+    あなたの身の回りにある「幸せ」はなんですか？写真に撮って、このギャラリーに投稿してみましょう。<br>
+    ※投稿された写真は展示会場（ガレージ）でも展示されます。<br>
+    ※不特定多数の方に見られる可能性を考慮して投稿してください。
+  </p>
+
   <div id="image-list"></div>
+
+  <!-- 固定3枚画像 -->
+  <div class="fixed-images">
+    <img src="image1.jpg" alt="説明1">
+    <img src="image2.jpg" alt="説明2">
+    <img src="image3.jpg" alt="説明3">
+  </div>
+
   <a href="gallery.html" class="more-link">写真投稿はこちら</a>
 </section>
 
 <!-- About -->
 <section id="about">
   <h2>About</h2>
-  <img src="摘む人キービジュアル　ポスター完成形.pdf" alt="ポスター">
+  <img src="poster.jpg" alt="ポスター">
 </section>
 
 <!-- Credit -->
@@ -163,42 +190,30 @@
   <div class="credit-content">
     監督<br>
     高橋悠<br><br>
-
     原案<br>
     水 / 渡辺武郎<br>
     空 / 小林心詠<br>
     植物 / 金尾宥良<br><br>
-
     キャスト<br>
     野澤実来　天勝千咲子　渡辺武郎　文平望結<br><br>
-
     編集<br>
     高橋悠<br><br>
-
     撮影<br>
     高橋悠　渡辺武郎<br><br>
-
     撮影助手<br>
     池田耀一<br><br>
-
     音声<br>
     高橋悠<br><br>
-
     写真<br>
     高橋悠<br><br>
-
     プロデューサー<br>
     文平望結<br><br>
-
     アシスタント<br>
     渡辺ひかり<br><br>
-
     キービジュアル<br>
     天勝千咲子<br><br>
-
     写真投稿サイト<br>
     野澤実来<br><br>
-
     Special Thanks<br>
     山田博行先生　ヨールグ・ビューラー先生　山本信一先生<br>
     坂野陽菜　若林佐宇
