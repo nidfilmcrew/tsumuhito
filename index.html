@@ -27,6 +27,14 @@
       margin-bottom: 1em;
     }
 
+/* 左揃えテキスト（セクション中央配置） */
+.left-text {
+  text-align: left;        /* 文章は左詰め */
+  max-width: 600px;        /* セクション内で中央寄せ */
+  margin: 0 auto 2em;      /* 上下余白を少し */
+  line-height: 1.6;        /* 行間調整（読みやすく） */
+}
+
     /* ハンバーガー */
     .menu-btn {
       position: fixed;
@@ -168,9 +176,11 @@
 <!-- Gallery -->
 <section id="gallery">
   <h2>Gallery</h2>
-  <p style="text-align:center; max-width:600px; margin:0 auto 2em;">
-    ここはみんなの「幸せ」が集まるギャラリー。<br>あなたの身の回りにある「幸せ」はなんですか？<br>
-    ※投稿された写真は展示会場（ガレージ）でも展示されます。不特定多数の方に見られる可能性を考慮して投稿してください。
+  <p class="left-text">
+    ここはみんなの「幸せ」が集まるギャラリー。<br>
+    あなたの身の回りにある「幸せ」はなんですか？<br>
+    ※投稿された写真は展示会場（ガレージ）でも展示されます。<br>
+    不特定多数の方に見られる可能性を考慮して投稿してください。
   </p>
 
   <div id="image-list"></div>
@@ -188,7 +198,7 @@
 <!-- About -->
 <section id="about">
   <h2>About</h2>
-  <p>coming soon...</p>
+  <p class="left-text">coming soon...</p>
 </section>
 
 <!-- Credit -->
