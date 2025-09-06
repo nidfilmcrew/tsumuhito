@@ -132,11 +132,24 @@
       height: auto;
     }
 
-    /* About */
-    #about p {
-      text-align: center;
+    /* 左揃えテキスト（セクション中央配置） */
+    .left-text {
+      text-align: left;
+      max-width: 600px;
+      margin: 0 auto 2em;
       font-size: 1.2em;
       color: #888;
+      line-height: 1.6;
+    }
+
+    /* About */
+    #about p {
+      text-align: left;
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 1.2em;
+      color: #888;
+      line-height: 1.6;
     }
 
     /* Credit */
@@ -168,9 +181,11 @@
 <!-- Gallery -->
 <section id="gallery">
   <h2>Gallery</h2>
-  <p style="text-align:center; max-width:600px; margin:0 auto 2em;">
-    ここはみんなの「幸せ」が集まるギャラリー。<br>あなたの身の回りにある「幸せ」はなんですか？<br>
-    ※投稿された写真は展示会場（ガレージ）でも展示されます。不特定多数の方に見られる可能性を考慮して投稿してください。
+  <p class="left-text">
+    ここはみんなの「幸せ」が集まるギャラリー。<br>
+    あなたの身の回りにある「幸せ」はなんですか？<br>
+    ※投稿された写真は展示会場（ガレージ）でも展示されます。<br>
+    不特定多数の方に見られる可能性を考慮して投稿してください。
   </p>
 
   <div id="image-list"></div>
@@ -188,7 +203,7 @@
 <!-- About -->
 <section id="about">
   <h2>About</h2>
-  <p>coming soon...</p>
+  <p class="left-text">coming soon...</p>
 </section>
 
 <!-- Credit -->
@@ -264,23 +279,3 @@
 
   // ハンバーガー
   const menuBtn = document.getElementById("menu-btn");
-  const menu = document.getElementById("menu");
-  menuBtn.addEventListener("click", () => {
-    menuBtn.classList.toggle("open");
-    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-  });
-
-  // メニューリンクで閉じつつスクロール
-  document.querySelectorAll('.menu a').forEach(a => {
-    a.addEventListener('click', e => {
-      e.preventDefault();
-      const target = document.querySelector(a.getAttribute('href'));
-      target.scrollIntoView({ behavior: 'smooth' });
-      menuBtn.classList.remove('open');
-      menu.style.display = 'none';
-    });
-  });
-</script>
-
-</body>
-</html>
