@@ -3,98 +3,87 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>摘む人</title>
+<title>摘む人ギャラリー</title>
 <link href="https://fonts.googleapis.com/css2?family=BIZ+UDMincho&family=Sawarabi+Gothic&display=swap" rel="stylesheet">
 <style>
-  body {
-    font-family: 'BIZ UDMincho', serif;
-    margin: 0;
-    padding: 20px;
+  body { 
+    font-family: 'BIZ UDMincho', serif; 
+    margin: 0; 
+    padding: 20px; 
     background-color: #f0f0f0;
   }
 
-  h1 {
-    text-align: center;
-    margin: 1em 0 0.5em 0;
+  h1 { 
+    text-align: center; 
+    margin-bottom: 0.2em; 
+    font-size: 2em; 
+  }
+  h2 { 
+    text-align: center; 
+    margin-top: 0; 
+    font-size: 1.5em; 
   }
 
-  h2 {
-    text-align: center;
-    margin-bottom: 0.5em;
-  }
-
-  .description {
+  p.description {
     text-align: center;
     font-family: 'Sawarabi Gothic', sans-serif;
-    max-width: 600px;
-    margin: 0 auto 1.5em auto;
-    line-height: 1.6;
+    margin-top: 0.5em;
+    margin-bottom: 2em;
+    line-height: 1.5em;
+    white-space: pre-line; /* 改行を反映 */
+    font-size: 0.95em;
   }
 
   #gallery {
     display: grid;
     grid-template-columns: repeat(2,1fr);
-    gap: 10px;
+    gap: 5px;
   }
-  .item {
-    border: 1px solid #ccc;
-    padding: 5px;
+  .item img { 
+    width: 100%; 
+    height: auto; 
+    display: block; 
+  }
+  .info {
     text-align: center;
-    background: #fafafa;
-    border-radius: 5px;
     font-family: 'Sawarabi Gothic', sans-serif;
+    margin-top: 0.2em;
+    font-size: 0.9em;
   }
-  .item img { width: 100%; height: auto; border-radius: 5px; }
+  .info .title { display:block; font-weight:bold; }
+  .info .nickname { display:block; color:#555; }
 
   /* プラスボタン */
   #uploadBtn {
-    position: fixed;
-    bottom: 20px; 
-    left: 50%;
+    position: fixed; 
+    bottom:20px; 
+    left:50%;
     transform: translateX(-50%);
-    font-size: 40px;
-    cursor: pointer;
+    font-size:40px; 
+    cursor:pointer;
     background:#b2b5a3; 
     color:white; 
     border-radius:50%;
-    width:60px; 
-    height:60px; 
-    text-align:center; 
-    line-height:60px;
-    box-shadow:0 4px 6px rgba(0,0,0,0.3); 
-    z-index:1001;
+    width:60px; height:60px; text-align:center; line-height:60px;
+    box-shadow:0 4px 6px rgba(0,0,0,0.3); z-index:1001;
   }
 
-  /* アップロードフォーム */
   #uploadForm {
     display:none; 
     position:fixed; 
-    top:50%; 
-    left:50%;
+    top:50%; left:50%;
     transform:translate(-50%,-50%); 
     background:white;
-    border:1px solid #ccc; 
-    padding:20px; 
-    z-index:1002;
-    width:90%; 
-    max-width:400px; 
-    border-radius:10px;
-    font-family: 'Sawarabi Gothic', sans-serif;
+    border:1px solid #ccc; padding:20px; z-index:1002;
+    width:90%; max-width:400px; border-radius:10px;
   }
   #overlay {
     display:none; 
-    position:fixed; 
-    top:0; 
-    left:0;
-    width:100%; 
-    height:100%; 
+    position:fixed; top:0; left:0;
+    width:100%; height:100%; 
     background:rgba(0,0,0,0.5);
     z-index:1000;
   }
-
-  @media screen and (min-width:601px) and (max-width:900px){#gallery{grid-template-columns:repeat(3,1fr);}}
-  @media screen and (min-width:901px) and (max-width:1200px){#gallery{grid-template-columns:repeat(4,1fr);}}
-  @media screen and (min-width:1201px){#gallery{grid-template-columns:repeat(5,1fr);}}
 
   /* ハンバーガー */
   .menu-btn {
@@ -111,10 +100,15 @@
     margin: 5px;
     transition: 0.4s;
   }
-  .menu-btn.open div:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
-  .menu-btn.open div:nth-child(2) { opacity: 0; }
-  .menu-btn.open div:nth-child(3) { transform: rotate(-45deg) translate(6px,-6px); }
-
+  .menu-btn.open div:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  .menu-btn.open div:nth-child(2) {
+    opacity: 0;
+  }
+  .menu-btn.open div:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+  }
   .menu {
     position: fixed;
     top: 0;
@@ -133,28 +127,30 @@
     padding: 1em;
     text-decoration: none;
     color: #000;
-    border-top: 1px solid #ccc;
-    width: 100%;
-    text-align: center;
   }
-  .menu a:last-child { border-bottom: 1px solid #ccc; }
+
+  @media screen and (min-width:601px) and (max-width:900px){#gallery{grid-template-columns:repeat(3,1fr);}}
+  @media screen and (min-width:901px) and (max-width:1200px){#gallery{grid-template-columns:repeat(4,1fr);}}
+  @media screen and (min-width:1201px){#gallery{grid-template-columns:repeat(5,1fr);}}
 </style>
 </head>
 <body>
-
-<h1>摘む人</h1>
-<h2>Gallery</h2>
-<p class="description">
-あなたの身の回りにある「幸せ」はなんですか？写真に撮って、このギャラリーに投稿してみましょう。また、投稿された写真は展示会場（ガレージ）でも展示されます。※不特定多数の方に見られる可能性を考慮して投稿してください。
-</p>
 
 <!-- ハンバーガー -->
 <div class="menu-btn" id="menu-btn">
   <div></div><div></div><div></div>
 </div>
 <div class="menu" id="menu">
-  <a href="https://nidfilmcrew.github.io/tsumuhito/">Home</a>
+  <a href="https://nidfilmcrew.github.io/tsumuhito/" id="home-link">Home</a>
 </div>
+
+<h1>摘む人</h1>
+<h2>Gallery</h2>
+<p class="description">
+あなたの身の回りにある「幸せ」はなんですか？写真に撮って、このギャラリーに投稿してみましょう。
+※投稿された写真は展示会場（ガレージ）でも展示されます。
+※不特定多数の方に見られる可能性を考慮して投稿してください。
+</p>
 
 <div id="gallery"></div>
 
@@ -185,6 +181,15 @@ const overlay = document.getElementById('overlay');
 const closeBtn = document.getElementById('closeBtn');
 const submitBtn = document.getElementById('submitBtn');
 
+// ハンバーガー
+const menuBtn = document.getElementById('menu-btn');
+const menu = document.getElementById('menu');
+menuBtn.addEventListener("click",()=>{menuBtn.classList.toggle("open");menu.style.display=menu.style.display==="flex"?"none":"flex";});
+document.getElementById('home-link').addEventListener('click',()=>{
+  menu.style.display='none';
+  menuBtn.classList.remove('open');
+});
+
 // モーダル表示
 uploadBtn.onclick = () => { uploadForm.style.display='block'; overlay.style.display='block'; }
 closeBtn.onclick = () => { uploadForm.style.display='none'; overlay.style.display='none'; }
@@ -204,8 +209,7 @@ async function loadGallery(){
     const div = document.createElement('div');
     div.className = 'item';
     div.innerHTML = `<img src="${post.image_url_web}" alt="${post.title}">
-                     <p>${post.title}</p>
-                     <p>${post.nickname}</p>`;
+                     <div class="info"><span class="title">${post.title}</span><span class="nickname">${post.nickname}</span></div>`;
     gallery.appendChild(div);
   });
 }
@@ -235,6 +239,7 @@ submitBtn.onclick = async () => {
     if(error){ alert('投稿失敗'); console.error(error); return; }
 
     await loadGallery();
+
     document.getElementById('fileInput').value='';
     document.getElementById('titleInput').value='';
     document.getElementById('nameInput').value='';
@@ -246,23 +251,6 @@ submitBtn.onclick = async () => {
 
 // 初期表示
 loadGallery();
-
-// ハンバーガー
-const menuBtn = document.getElementById("menu-btn");
-const menu = document.getElementById("menu");
-menuBtn.addEventListener("click", () => {
-  menuBtn.classList.toggle("open");
-  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-});
-
-// メニューリンクで閉じる
-document.querySelectorAll('.menu a').forEach(a => {
-  a.addEventListener('click', e => {
-    menuBtn.classList.remove('open');
-    menu.style.display = 'none';
-    window.location.href = a.href;
-  });
-});
 </script>
 </body>
 </html>
