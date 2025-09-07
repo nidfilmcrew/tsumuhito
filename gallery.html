@@ -25,24 +25,33 @@
   }
 
   .left-text {
-  text-align: left;
-  max-width: 600px;
-  margin: 0 auto 2em;
-  line-height: 1.5em;
-  font-family: 'BIZ UDMincho', serif !important; /* ← !important を追加 */
-  font-size: 0.95em;
-  white-space: pre-line;
-}
+    text-align: left;
+    max-width: 600px;
+    margin: 0 auto 2em;
+    line-height: 1.5em;
+    font-family: 'BIZ UDMincho', serif !important;
+    font-size: 0.95em;
+    white-space: pre-line;
+  }
 
+  /* ギャラリーをPinterest風に */
   #gallery {
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 5px;
+    column-count: 2;        /* スマホは2列 */
+    column-gap: 10px;       /* 列のすき間 */
+    margin: 0 auto;
+    max-width: 1200px;
+  }
+  .item {
+    break-inside: avoid;    /* 画像が途中で切れないように */
+    margin-bottom: 10px;    /* 下に余白 */
+    background: #fff;
+    padding: 5px;
   }
   .item img { 
     width: 100%; 
     height: auto; 
     display: block; 
+    border-radius: 0;
   }
   .info {
     text-align: center;
@@ -129,9 +138,10 @@
     color: #000;
   }
 
-  @media screen and (min-width:601px) and (max-width:900px){#gallery{grid-template-columns:repeat(3,1fr);}}
-  @media screen and (min-width:901px) and (max-width:1200px){#gallery{grid-template-columns:repeat(4,1fr);}}
-  @media screen and (min-width:1201px){#gallery{grid-template-columns:repeat(5,1fr);}}
+  /* レスポンシブ: 列数調整 */
+  @media screen and (min-width:601px) and (max-width:900px){#gallery{column-count:3;}}
+  @media screen and (min-width:901px) and (max-width:1200px){#gallery{column-count:4;}}
+  @media screen and (min-width:1201px){#gallery{column-count:5;}}
 </style>
 </head>
 <body>
@@ -183,7 +193,10 @@ const submitBtn = document.getElementById('submitBtn');
 // ハンバーガー
 const menuBtn = document.getElementById('menu-btn');
 const menu = document.getElementById('menu');
-menuBtn.addEventListener("click",()=>{menuBtn.classList.toggle("open");menu.style.display=menu.style.display==="flex"?"none":"flex";});
+menuBtn.addEventListener("click",()=>{
+  menuBtn.classList.toggle("open");
+  menu.style.display=menu.style.display==="flex"?"none":"flex";
+});
 document.getElementById('home-link').addEventListener('click',()=>{
   menu.style.display='none';
   menuBtn.classList.remove('open');
